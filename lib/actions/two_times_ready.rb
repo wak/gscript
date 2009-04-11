@@ -1,4 +1,6 @@
-class TwoTimesReady < GsActionBase
+class TwoTimesReady < GScript::GsActionBase
+  allow_category :country
+
   def start
     @user[:count] = 0
     @status.change(:ready, :method => :count)

@@ -18,4 +18,9 @@ class Actor < ActiveRecord::Base
   has_many(:actions,
            :through => :actor_actions,
            :dependent => :destroy)
+
+  has_many :actor_categories
+  has_many(:categories,
+           :through => :actor_categories,
+           :dependent => :destroy)
 end

@@ -3,7 +3,12 @@ class AddTestActors < ActiveRecord::Migration
     actors = {
       :america => 'Americal',
       :japan => 'Japan',
-      :china => 'China'
+      :china => 'China',
+      :rits => 'Ritsumei',
+      :mit => 'MIT',
+      :toyota => 'Toyota',
+      :mitsubishi => 'Mitsubishi',
+      :special => 'SPECIAL'
     }
     actors.each {|login, name|
       Actor.create(:login => login.to_s, :name => name)

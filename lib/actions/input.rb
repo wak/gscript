@@ -1,4 +1,6 @@
 class Input < GScript::GsActionBase
+  allow_all
+
   def start
     select_field(:actor, :actor,
                  :list => @actors,

@@ -9,10 +9,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090411084251) do
+ActiveRecord::Schema.define(:version => 20090411123850) do
 
   create_table "actions", :force => true do |t|
-    t.string   "iname"
+    t.string   "iname",      :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -24,9 +24,22 @@ ActiveRecord::Schema.define(:version => 20090411084251) do
     t.datetime "updated_at"
   end
 
+  create_table "actor_categories", :force => true do |t|
+    t.integer  "actor_id",    :null => false
+    t.integer  "category_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "actors", :force => true do |t|
     t.string   "login",                      :null => false
     t.string   "name",       :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories", :force => true do |t|
+    t.string   "iname",      :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

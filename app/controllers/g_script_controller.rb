@@ -22,6 +22,11 @@ class GScriptController < ApplicationController
     render :text => 'Ready Not Found.'
   end
 
+  def init_actions
+    GScript.init_actions
+    redirect_to :action => :index
+  end
+
   private
   def do_common
     inputed = false

@@ -4,16 +4,30 @@ module GScript
       def allow_actor(*actors)
         write_inheritable_attribute(:allow_actors, actors)
       end
+      def allow_category(*categories)
+        write_inheritable_attribute(:allow_categories, categories)
+      end
+      def allow_all
+        write_inheritable_attribute(:allow_all, true)
+      end
+
       def _gs_allowed_actors
-        aactors = read_inheritable_attribute(:allow_actors)
-        unless aactors
-          return Actor.find(:all)
-        end
-        aactors = aactors.map {|t| t.to_s }
-        return Actor.find(:all,
-                          :conditions => {
-                            :login => aactors
-                          })
+        allow_all = read_inheritable_attribute(:allow_all)
+        return Actor.all if allow_all
+
+        actors = read_inheritable_attribute(:allow_actors)
+        cats = read_inheritable_attribute(:allow_categories)
+
+        actors = (actors || []).map {|t| t.to_s }
+        cats = (cats || []).map {|t| t.to_s }
+        actors =
+          Actor.find(:all,
+                     :conditions => {:login => actors})
+        categories =
+          Category.find(:all,
+                        :conditions => {:iname => cats})
+        categories.each {|c| actors += c.actors }
+        return actors.uniq
       end
     end
     def action_name
@@ -21,4 +35,3 @@ module GScript
     end
   end
 end
-
