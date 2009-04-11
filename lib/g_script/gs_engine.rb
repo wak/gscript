@@ -1,6 +1,6 @@
 module GScript
   class GsEngine < GsBase
-    attr_reader :_fields, :_ready
+    attr_reader :_fields
 
     def self.current_engine=(engine)
       @@current_engine = engine
@@ -18,10 +18,12 @@ module GScript
       @current = nil
       @_ready = nil
       @_fields = []
+      @actorhash = {}
       actors.each {|actor|
         gactor = GsActor.new(actor.login)
         @actors << gactor
-        instance_variable_set("@#{actor.login}", gactor)
+        @actorhash[actor.login] = gactor
+        #instance_variable_set("@#{actor.login}", gactor)
       }
       return nil
     end
@@ -32,9 +34,6 @@ module GScript
       return key ? attrs[key] : attrs
     end
     def method_missing(name, *args)
-      if instance_variable_defined?("@#{name}")
-        return actor(name)
-      end
       super
     end
     def file_field(name, option={}, &verify)
@@ -52,8 +51,20 @@ module GScript
     def input(field)
       @input[field]
     end
-    def actor(actor)
-      instance_variable_get("@#{actor}")
+    def actor(act)
+      @actorhash[act.to_s]
+      #instance_variable_get("@#{actor}")
+    end
+    def actors(*acts)
+      return @actors if acts.empty?
+      acts.map {|t| actor(t) }
+    end
+    def actor_c(*cats)
+      cats = cats.to_a.map(&:to_s)
+      categories =
+        Category.find(:all,
+                      :conditions => {:iname => cats})
+      return categories.map(&:actors).flatten.uniq
     end
     def current=(actor)
       login = (actor.is_a?(Actor) ? actor.login : actor)
