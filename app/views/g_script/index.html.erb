@@ -1,0 +1,34 @@
+<h1>GScript Index</h1>
+<h2>Actions For Actor</h2>
+<% Actor.all.each do |actor| -%>
+  <h3><%= actor.login %></h3>
+  <ul>
+    <% actor.actions.each do |action| -%>
+      <li>
+        <%= link_to action.iname,
+                    :action => :startup,
+                    :gaction => action.iname %>
+      </li>
+    <% end %>
+  </ul>
+<% end -%>
+
+<h2>All Actions</h2>
+<ul>
+  <% Action.all.each do |action| -%>
+    <li>
+      <%= link_to action.iname,
+                  :action => :startup,
+                  :gaction => action.iname %>
+    </li>
+  <% end %>
+</ul>
+
+<h2>Ready List</h2>
+<ul>
+  <% @readies.each do |ready| %>
+    <li>
+      <%= link_to ready.id, :action => :ready, :ready_id => ready.id %>
+    </li><br>
+  <% end %>
+</ul>
