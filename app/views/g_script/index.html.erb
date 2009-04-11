@@ -23,7 +23,7 @@
 
 <h2>Actions For Actor</h2>
 <% Actor.all.each do |actor| -%>
-  <h3><%=h actor.login %> (<%=h actor.categories.map{|c| c.iname}.join(', ') %>)</h3>
+  <h3><%=h actor.login %> (<%=h actor.categories.map(&:iname).join(', ') %>)</h3>
   <ul>
     <% actor.actions.each do |action| -%>
       <li>

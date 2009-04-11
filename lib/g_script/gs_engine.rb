@@ -1,6 +1,6 @@
 module GScript
   class GsEngine < GsBase
-    attr_reader :_fields
+    attr_reader :_gs_fields
 
     def self.current_engine=(engine)
       @@current_engine = engine
@@ -13,11 +13,11 @@ module GScript
       actors = Actor.find(:all, :select => 'login')
       @status = GsStatus.new(self)
       @user = {}
-      @input = {}
       @actors = []
       @current = nil
-      @_ready = nil
-      @_fields = []
+      @_gs_input = {}
+      @_gs_ready = nil
+      @_gs_fields = []
       @actorhash = {}
       actors.each {|actor|
         gactor = GsActor.new(actor.login)
@@ -46,10 +46,10 @@ module GScript
       _gs_field(GsField::GsSelectField, name, type, option, &verify)
     end
     def clear_fields
-      @_fields = []
+      @_gs_fields = []
     end
     def input(field)
-      @input[field]
+      @_gs_input[field]
     end
     def actor(act)
       @actorhash[act.to_s]
@@ -75,10 +75,10 @@ module GScript
     #  Follow methods for GScript system
     #
     def _gs_field(klass, name, type, option, &verify)
-      if @_fields.any? {|f| f.name == name }
+      if @_gs_fields.any? {|f| f.name == name }
         raise "Field '#{name}' already defined."
       end
-      @_fields << klass.new(name, type, option, &verify)
+      @_gs_fields << klass.new(name, type, option, &verify)
     end
     def _gs_execute(&block)
       before = Proc.new {
@@ -108,29 +108,30 @@ module GScript
       raise
     end
     def _gs_input_set(key, val)
-      field = @_fields.find {|f| f == key }
+      field = @_gs_fields.find {|f| f == key }
       return false unless field
       field.set_value(self, val)
       field.valid?
       field.value
-      t = @input[field.name] = field.value if field.valid?
+      t = @_gs_input[field.name] = field.value if field.valid?
       return t
     end
     def _gs_input_valid?
-      @_fields.all? {|f| f.valid? }
+      @_gs_fields.all? {|f| f.valid? }
     end
+    def _gs_status; @status end
     def _gs_save
-      @_ready ||= Ready.new
-      @_ready.gscript =
+      @_gs_ready ||= Ready.new
+      @_gs_ready.gscript =
         Marshal.dump({ :status => @status, :user => @user })
-      @_ready.action = info(:iname)
-      @_ready.save!
+      @_gs_ready.action = info(:iname)
+      @_gs_ready.save!
     end
 
     # Don't call this method on Thread.
     # Please run Rails with shared-nothing architecture.
     def _gs_load(ready)
-      @_ready = ready
+      @_gs_ready = ready
       self.class.current_engine = self
       tmp = Marshal::load(ready.gscript)
       self.class.current_engine = nil

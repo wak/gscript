@@ -1,4 +1,4 @@
-class SendMoney < GsActionBase
+class SendMoney < GScript::GsActionBase
   def start
     puts 'Hello'
     @status.change(:continue, :method => :end)

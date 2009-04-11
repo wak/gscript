@@ -13,7 +13,7 @@ class File < GScript::GsActionBase
     file_field(:file,
                :nil => true,
                :desc => 'Input file') {|file|
-      (@input[:mode] == :upload) ? !!file : true
+      (input(:mode) == :upload) ? !!file : true
     }
     @status.change(:input, :method => :switch)
   end

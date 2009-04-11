@@ -15,14 +15,14 @@ module GScript
         action = Action.new
         name = path.slice(/\A.*?([a-z_]+)\.rb\z/, 1)
         action.iname = name
-        action.actors = load_action(name)._gs_allowed_actors
+        action.actors = action_class(name)._gs_allowed_actors
         action.save!
       }
     end
     def action(name)
-      load_action(name).new
+      action_class(name).new
     end
-    def load_action(name)
+    def action_class(name)
       @@actions ||= {}
       return @@actions[name] if @@actions.key?(name)
 
@@ -42,5 +42,3 @@ module GScript
     end
   end
 end
-
-#p GScript::Engine.new._execute_file(:test, :first)

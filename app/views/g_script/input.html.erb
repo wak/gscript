@@ -5,7 +5,7 @@
   <%= hidden_field_tag :gaction, @base[:action] %>
   <%= hidden_field_tag(:ready_id, @ready.id) if @ready %>
 
-  <% @action._fields.each do |field| %>
+  <% @action._gs_fields.each do |field| %>
   <%=  field.generate %> <br>
   <% end %>
   <br>

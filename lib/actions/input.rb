@@ -13,7 +13,7 @@ class Input < GScript::GsActionBase
     text_field(:value, :int,
                :desc => 'Please input number')
     select_field(:item, :item,
-                 :list => [japan.fund],
+                 :list => [actor(:japan).fund],
                  :desc => 'Please select item')
 
     @status.change(:input, :method => :nothing)

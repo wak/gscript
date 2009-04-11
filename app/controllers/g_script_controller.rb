@@ -49,8 +49,7 @@ class GScriptController < ApplicationController
           # not return
         end
       when :ready
-        @action._gs_save
-        @ready = @action._gs_ready
+        @ready = @action._gs_save
         render :action => :ready
         return
       when :finish
@@ -58,14 +57,14 @@ class GScriptController < ApplicationController
         render :action => :finish
         return
       when :send_file
-        @file = @action.status.file
+        @file = @action._gs_status.file
         send_file(@file.public_filename,
                   :filename => @file.filename,
                   :type => @file.content_type,
                   :disposition => 'inline')
         return
       else
-        render :text => "Bad GScript status(=#{@action.status.mode})"
+        render :text => "Bad GScript status(=#{@action._gs_status.mode})"
         return
       end
     end

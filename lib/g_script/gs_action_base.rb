@@ -18,8 +18,8 @@ module GScript
         actors = read_inheritable_attribute(:allow_actors)
         cats = read_inheritable_attribute(:allow_categories)
 
-        actors = (actors || []).map {|t| t.to_s }
-        cats = (cats || []).map {|t| t.to_s }
+        actors = actors.to_a.map(&:to_s)
+        cats = cats.to_a.map(&:to_s)
         actors =
           Actor.find(:all,
                      :conditions => {:login => actors})
