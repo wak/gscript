@@ -1,11 +1,11 @@
 # == Schema Information
-# Schema version: 20090110064135
+# Schema version: 20090411123850
 #
 # Table name: items
 #
 #  id         :integer(4)      not null, primary key
 #  actor_id   :integer(4)      not null
-#  iname      :string(255)     default(""), not null
+#  iname      :string(255)     not null
 #  name       :string(255)     default(""), not null
 #  ivalue     :integer(4)      default(0), not null
 #  svalue     :string(255)     default(""), not null

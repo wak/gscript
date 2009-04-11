@@ -1,10 +1,10 @@
 # == Schema Information
-# Schema version: 20090110064135
+# Schema version: 20090411123850
 #
 # Table name: actors
 #
 #  id         :integer(4)      not null, primary key
-#  login      :string(255)     default(""), not null
+#  login      :string(255)     not null
 #  name       :string(255)     default(""), not null
 #  created_at :datetime
 #  updated_at :datetime
