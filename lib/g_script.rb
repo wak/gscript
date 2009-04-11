@@ -23,10 +23,11 @@ module GScript
       action_class(name).new
     end
     def action_class(name)
+      name = name.underscore
       @@actions ||= {}
       return @@actions[name] if @@actions.key?(name)
 
-      path = "#{RAILS_ROOT}/lib/actions/#{name.underscore}.rb"
+      path = "#{RAILS_ROOT}/lib/actions/#{name}.rb"
       unless File.file?(path)
         raise _e("Action file '#{path}' not found.")
       end
