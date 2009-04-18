@@ -1,0 +1,155 @@
+GScript取り扱い説明書
+
+※ 未完成
+
+■ 概要
+    GScriptはGSGにおけるアクションをより効率良く作成するための補助ツールです。
+  オブジェクト指向フレームワークのような構成をしています。
+
+■ ファイル構成
+
+    GScriptコードの大半はlibディレクトリ以下に入っています。
+
+      lib/
+        actions/      アクションを入れるディレクトリ
+        g_script/     GScript用
+        g_script.rb   GScript用
+
+■ アクションの作り方
+  ○ ファイルを作る
+      アクション開発者は定められた書式で記述したファイルをlib/actions内におきます。
+      アクションの名前がSendMoneyであった場合、lib/actions/send_money.rbを作成し、
+    以下のようにクラスSendMoneyを定義します。
+
+        class SendMoney < GScript::GsActionBase
+        end
+
+  ○ アクターを指定する
+      アクションを実行できるアクターを設定するには、allow_actor, allow_category,
+    allow_allメソッドを使用します。
+
+        allow_actor(*actors)
+          引数に指定したアクターに実行許可を与えます。
+        allow_category(*categories)
+          カテゴリ単位でアクターに実行許可を与えます。
+        allow_all
+          すべてのアクターに実行許可を与えます。
+
+      例えば、以下のように記述します。
+
+        class SendMoney < GScript::GsActionBase
+          allow_category(:country, :school)
+          allow_actor(:toyota, :sony)
+        end
+
+  ○ 状態
+      GScriptは状態をもちます。現在の状態は@statusに格納され、@status.changeで変更
+    することができます。状態の中でも重要なのがモードです。モードによって今後の動き
+    が大きく変わってきます。
+      GScriptは以下の状態を持つことができます。
+
+        :continue
+            実行を続けます。オプション:methodで指定したメソッドへ制御が移ります。
+        :input
+            入力モードに入ります。正しい値が入力されると、オプション:methodで指定
+          したメソッドへ制御が移ります。
+        :ready
+            状態を保存し、承認モードに入ります。承認にてイベントがあると、オプション
+          :methodで指定したメソッドから実行が再開します。
+        :finish
+            アクションを終了します。
+        :cancel
+            アクションの実行をキャンセルします。
+
+    状態を変更するには、以下のようにします。
+
+        @status.change(:continue, :method => :next_method)
+
+    GScriptでは、モードを切り替えて行くことによって、アクションを組んでいきます。
+
+  ○ 実行
+      GScriptはイベントが起きると、まずアクションのstartメソッドを呼び出します。
+    ユーザはそこからモードを切り替えて行くことによって、目的のアクションを実行し
+    ます。
+
+  ○ 状態の保存と復元
+      現在の状態を保存するには、:readyモードになります。その際、@userに格納した
+    Rubyオブジェクトも保存の対象となり、実行再開時に適切に復元されます。この機能
+    は入力から承認に入るようなアクションで使用すると便利です。Marshal.dumpでダンプ
+    できないようなオブジェクトは保存できません。ご注意ください。
+      @userには、デフォルトで空のHashが入っています。
+
+  ○ API
+      GScriptで使用できるメソッドを以下に示します。
+
+        actor(actor_name)
+            アクターを取得します。
+        actors(*actor_names)
+            アクターを複数取得します。結果は配列となって返ってきます。
+        actor_c(*categories)
+            アクターをカテゴリ単位で取得します。結果は配列となって返ってきます。
+        (以下略)
+
+  ○ 注意事項
+      startメソッドやchange(:input)するメソッドは複数回実行されることがあります。
+    よって副作用のある式は記述しないことをお勧めします。
+
+■ 作成例
+    こんなふうに記述できるようになる、かもしれません。
+
+      class SendMoney < GScript::GsActionBase
+        allow_all
+
+        def start
+          select_field(:to, :actor,
+                       :list => actors,
+                       :name => 'Target actor',
+                       :message => 'Select target actor')
+          text_field(:much, :int,
+                     :min => 1,
+                     :max => @current.fund,
+                     :name => 'Amount',
+                     :message => 'How much?',
+                     :errors => {:max => 'Your fund too small'})
+          @status.change(:input, :method => :ready)
+        end
+        def ready
+          @user[:from] = @current
+          @user[:to] = input(:to)
+          @user[:much] = input(:much)
+
+          @current.fund -= input(:much)
+
+          @status.change(:ready,
+                         :actor => input(:to),
+                         :method => :switch,
+                         :select => [[:accepted, 'Yes'], [:refused, 'No']],
+                         :message => "#{@current.name} send you $#{input(:much)}.")
+        end
+        def switch
+          case @ready
+          when :accepted
+            @status.change(:continue, :method => :execute)
+          when :refused
+            @status.change(:continue, :method => :cancel)
+          else
+            raise 'No here.'
+          end
+        end
+        def execute
+          @user[:to].fund += @user[:much]
+          message = sprintf("%s => %s [$%d]",
+                            @user[:from].name, @user[:to].name, @user[:much])
+          @user[:to].log(message, :type => :succeed)
+          @user[:from].log(message, :type => :succeed)
+        end
+        def cancel
+          @user[:from].fund += @user[:much]
+          message = sprintf("CANCEL %s => %s [$%d]",
+                            @user[:from].name, @user[:to].name, @user[:much])
+          @user[:to].log(message, :type => :cancel)
+          @user[:from].log(message, :type => :cancel)
+
+          @status.change(:cancel)
+        end
+      end
