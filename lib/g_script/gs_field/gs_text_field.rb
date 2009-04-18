@@ -7,15 +7,16 @@ module GScript
       def generate
         desc = option(:desc)
         desc = desc ? "#{h(desc)}: " : ''
+        default = (@value ? @value : option(:value))
         if option(:multi)
           desc +
             text_area_tag(@fieldname,
-                          option(:value),
+                          default,
                           option_hash(:rows, :cols, :size, :disabled))
         else
           desc +
             text_field_tag(@fieldname,
-                           option(:value),
+                           default,
                            option_hash(:maxlength, :size, :disabled))
         end
       end

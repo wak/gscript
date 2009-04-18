@@ -45,16 +45,27 @@ module GScript
       end
       def generate; end
       def valid?
-        if @value.blank? && !@options[:blank]
+        if @value.blank?
+          return true if allow_blank?
           @errors[:blank] = error(:blank)
           return false
         end
         type_valid = "#{type}_valid?"
-        return false if respond_to?(type_valid) && !send(type_valid, @value)
+        if respond_to?(type_valid) && !send(type_valid, @value)
+          return false
+        end
+        if option(:list) && !option(:list).member?(@value)
+          @errors[:list] = error(:list)
+          return false
+        end
         if @verify
           e = @verify.call(@value)
           if e
-            @errors[e] = error(e)
+            if e.is_a?(String)
+              @errors[:verify] = e
+            else
+              @errors[e] = error(e)
+            end
             return false
           end
         end
@@ -122,11 +133,12 @@ module GScript
         end
         return mes || 'INVALID'
       end
+      def allow_blank?
+        !!@options[:blank]
+      end
 
       private
       def int_valid?(value)
-        return true if value.nil?
-
         ret = true
         if option(:max) && value > option(:max)
           ret = false

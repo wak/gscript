@@ -32,12 +32,6 @@ module GScript
         return desc + select_tag(@fieldname, option_tags.join,
                                  :include_blank => true)
       end
-      def valid?
-        return false unless super
-        unless option(:list).member?(@value)
-          @errors[:list] = error(:list)
-        end
-      end
     end
   end
 end
