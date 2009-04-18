@@ -11,7 +11,10 @@ class SendMoney < GScript::GsActionBase
                :max => @current.fund,
                :name => 'Amount',
                :message => 'How much?',
-               :errors => {:min => 'Your fund too small'})
+               :error => {
+                 :min => 'Should positive number.',
+                 :max => 'Your fund too small.'
+               })
     @status.change(:input, :method => :ready)
   end
   def ready
