@@ -1,0 +1,12 @@
+<% form_tag url_for(:controller => :actors, :action => :login) do -%>
+  <label for="actor">アクター</label><br/>
+  <%
+    option_tags = Actor.all.map {|actor|
+      value, name = actor.id, actor.name
+      sprintf("<option value=\"%s\">%s</option>", value, h(name))
+    }
+   %>
+  <%= select_tag 'actor_id', option_tags.join %>
+
+  <%= submit_tag 'ログイン' %></p>
+<% end -%>
