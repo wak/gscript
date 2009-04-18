@@ -111,13 +111,18 @@ module GScript
       field = @_gs_fields.find {|f| f == key }
       return false unless field
       field.set_value(self, val)
-      field.valid?
-      field.value
-      t = @_gs_input[field.name] = field.value if field.valid?
-      return t
+      #field.valid?
+      #field.value
+      @_gs_input[field.name] = field.value
+      #t = @_gs_input[field.name] = field.value if field.valid?
+      #return t
     end
     def _gs_input_valid?
-      @_gs_fields.all? {|f| f.valid? }
+      valid = true
+      @_gs_fields.each {|f|
+        valid = false unless f.valid?
+      }
+      return valid
     end
     def _gs_status; @status end
     def _gs_save

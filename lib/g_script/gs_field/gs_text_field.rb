@@ -5,18 +5,18 @@ module GScript
         super(name, type, option, &verify)
       end
       def generate
-        desc = @option[:desc]
+        desc = option(:desc)
         desc = desc ? "#{h(desc)}: " : ''
-        if @option[:multi]
+        if option(:multi)
           desc +
             text_area_tag(@fieldname,
-                          @option[:value],
-                          get_options(:rows, :cols, :size, :disabled))
+                          option(:value),
+                          option_hash(:rows, :cols, :size, :disabled))
         else
           desc +
             text_field_tag(@fieldname,
-                           @option[:value],
-                           get_options(:maxlength, :size, :disabled))
+                           option(:value),
+                           option_hash(:maxlength, :size, :disabled))
         end
       end
     end

@@ -37,7 +37,7 @@ module GScript
       return @_item.value
     end
     def to_s
-      "#{@actor.login}.#{@_item.iname}"
+      value.to_s
     end
     def method_missing(name, *args)
       if @_item.respond_to?(name)

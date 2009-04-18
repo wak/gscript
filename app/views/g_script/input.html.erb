@@ -7,6 +7,11 @@
 
   <% @action._gs_fields.each do |field| %>
   <%=  field.generate %> <br>
+  <%   unless field.errors.empty? -%>
+  <%     field.errors.each_value do |m| -%>
+           <%= '&nbsp;' * 4 %><i><%=h m %></i><br>
+  <%     end %>
+  <%   end %>
   <% end %>
   <br>
   <%= submit_tag 'Execute' %>

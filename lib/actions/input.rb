@@ -3,6 +3,7 @@ class Input < GScript::GsActionBase
 
   def start
     select_field(:actor, :actor,
+                 :selected => @current,
                  :list => @actors,
                  :desc => 'Please select your actor')
     select_field(:ivalue, :int,
