@@ -11,7 +11,7 @@ module GScript
     def initialize
       _d "GScript Initialize"
       actors = Actor.find(:all, :select => 'login')
-      @status = GsStatus.new(self)
+      @status = GsStatus.new
       @user = {}
       @actors = []
       @current = nil
@@ -138,7 +138,7 @@ module GScript
     def _gs_load(ready)
       @_gs_ready = ready
       self.class.current_engine = self
-      tmp = Marshal::load(ready.gscript)
+      tmp = Marshal.load(ready.gscript)
       self.class.current_engine = nil
       @status = tmp[:status]
       @user = tmp[:user]

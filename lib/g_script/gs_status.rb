@@ -2,8 +2,7 @@ module GScript
   class GsStatus < GsBase
     attr_reader :mode, :method, :file
     attr_writer :changed
-    def initialize(gscript)
-      @gscript = gscript
+    def initialize
       reset
     end
     def change(mode, option={})
