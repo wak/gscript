@@ -29,6 +29,7 @@ class GScriptController < ApplicationController
 
   private
   def do_common
+    @action.current = @current_actor
     inputed = false
     loop do
       case @action._gs_execute
