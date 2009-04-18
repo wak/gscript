@@ -5,14 +5,14 @@ class File < GScript::GsActionBase
     clear_fields
     select_field(:mode, :symbol,
                  :list => [:upload, :download],
-                 :desc => 'Select mode')
+                 :message => 'Select mode')
 
     select_field(:actor, :actor,
                  :list => @actors,
-                 :desc => 'Select actor')
+                 :message => 'Select actor')
     file_field(:file,
                :nil => true,
-               :desc => 'Input file') {|file|
+               :message => 'Input file') {|file|
       (input(:mode) == :upload) ? !!file : true
     }
     @status.change(:input, :method => :switch)

@@ -4,7 +4,7 @@ class ReadyThenInput < GScript::GsActionBase
   end
   def input
     text_field(:value, :int,
-               :desc => 'Please input number')
+               :message => 'Please input number')
     @status.change(:input, :method => :finish)
   end
   def finish

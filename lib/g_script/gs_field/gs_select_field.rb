@@ -6,7 +6,7 @@ module GScript
         @options[:list] ||= []
       end
       def generate
-        desc = option(:desc)
+        desc = option(:message)
         desc = desc ? "#{h(desc)}: " : ''
         elements = option(:list)
         is_selected = false

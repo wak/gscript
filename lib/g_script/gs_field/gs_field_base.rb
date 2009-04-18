@@ -50,8 +50,8 @@ module GScript
           @errors[:blank] = error(:blank)
           return false
         end
-        type_valid = "#{type}_valid?"
-        if respond_to?(type_valid) && !send(type_valid, @value)
+        type_valid = "#{@type}_valid?"
+        if respond_to?(type_valid, true) && !send(type_valid, @value)
           return false
         end
         if option(:list) && !option(:list).member?(@value)
@@ -140,11 +140,11 @@ module GScript
       private
       def int_valid?(value)
         ret = true
-        if option(:max) && value > option(:max)
+        if option(:max) && option(:max) < value
           ret = false
           @errors[:max] = error(:max)
         end
-        if option(:min) && value > option(:min)
+        if option(:min) && option(:min) > value
           ret = false
           @errors[:min] = error(:min)
         end

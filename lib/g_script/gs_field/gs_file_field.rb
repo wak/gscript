@@ -5,7 +5,7 @@ module GScript
         super(name, type, option, &verify)
       end
       def generate
-        desc = option(:desc)
+        desc = option(:message)
         desc = desc ? "#{h(desc)}: " : ''
         desc + file_field_tag("#{@fieldname}[uploaded_data]",
                               option_hash)

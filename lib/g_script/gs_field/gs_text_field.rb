@@ -5,7 +5,7 @@ module GScript
         super(name, type, option, &verify)
       end
       def generate
-        desc = option(:desc)
+        desc = option(:message)
         desc = desc ? "#{h(desc)}: " : ''
         default = (@value ? @value : option(:value))
         if option(:multi)
