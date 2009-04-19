@@ -155,6 +155,7 @@ module GScript
       unless @status.option(:actor)
         raise 'GScript(:ready): Ready actor not selected.'
       end
+      @_gs_ready.message = @status.option(:message)
       @_gs_ready.actor = @status.option(:actor)._actor
       @_gs_ready.save!
       return @_gs_ready

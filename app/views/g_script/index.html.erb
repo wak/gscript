@@ -33,7 +33,7 @@
 <ul>
   <% @current_actor.readies.each do |ready| -%>
     <li>
-       <%= ready.id %>:
+       [<%=h ready.id %>] <%=h ready.message %> -
        <%  ready.selection.each do |value| -%>
        <%=   link_to value,
                      :action => :ready,

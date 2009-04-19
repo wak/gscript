@@ -27,7 +27,7 @@ class SendMoney < GScript::GsActionBase
     @status.change(:ready,
                    :actor => input(:to),
                    :method => :switch,
-                   :select => [[:accepted, 'Yes'], [:refused, 'No']],
+                   :selection => [:accepted, 'Yes', :refused, 'No'],
                    :message => "#{@current.name} send you $#{input(:much)}.")
   end
   def switch
@@ -44,15 +44,15 @@ class SendMoney < GScript::GsActionBase
     @user[:to].fund += @user[:much]
     message = sprintf("%s => %s [$%d]",
                       @user[:from].name, @user[:to].name, @user[:much])
-    @user[:to].log(message, :type => :succeed)
-    @user[:from].log(message, :type => :succeed)
+#    @user[:to].log(message, :type => :succeed)
+#    @user[:from].log(message, :type => :succeed)
   end
   def cancel
     @user[:from].fund += @user[:much]
     message = sprintf("CANCEL %s => %s [$%d]",
                       @user[:from].name, @user[:to].name, @user[:much])
-    @user[:to].log(message, :type => :cancel)
-    @user[:from].log(message, :type => :cancel)
+#    @user[:to].log(message, :type => :cancel)
+#    @user[:from].log(message, :type => :cancel)
 
     @status.change(:cancel)
   end

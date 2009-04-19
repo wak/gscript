@@ -54,7 +54,7 @@ class GScriptController < ApplicationController
         @ready = @action._gs_save
         render :action => :ready
         return
-      when :finish
+      when :finish, :cancel
         @ready.destroy if @ready
         render :action => :finish
         return

@@ -7,8 +7,8 @@ module GScript
       reset
     end
     def change(mode, options={})
-      unless [:continue, :input,
-              :ready, :finish, :send_file].member?(mode)
+      unless [:continue, :input, :ready,
+              :cancel, :finish, :send_file].member?(mode)
         raise _e("GStatus#change: unknown mode(=#{mode})")
       end
       @changed = true
@@ -19,6 +19,7 @@ module GScript
         @options[:file] = options[:file]
       when :ready
         @options[:actor] = options[:actor]
+        @options[:message] = options[:message]
         @options[:selection] = (options[:selection] || [])
       end
       return mode
