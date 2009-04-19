@@ -66,8 +66,11 @@ ActiveRecord::Schema.define(:version => 20090411123850) do
   end
 
   create_table "readies", :force => true do |t|
-    t.string   "action"
-    t.text     "gscript"
+    t.integer  "actor_id",   :null => false
+    t.text     "_selection", :null => false
+    t.string   "action",     :null => false
+    t.text     "gscript",    :null => false
+    t.text     "message",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

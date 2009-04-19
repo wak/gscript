@@ -13,6 +13,7 @@
 class Actor < ActiveRecord::Base
   has_many :items
   has_many :files, :class_name => 'GFile', :order => 'id DESC'
+  has_many :readies, :dependent => :destroy
 
   has_many :actor_actions
   has_many(:actions,

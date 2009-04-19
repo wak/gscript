@@ -1,6 +1,6 @@
 module GScript
   class GsEngine < GsBase
-    attr_reader :_gs_fields
+    attr_reader :_gs_fields, :ready
 
     def self.current_engine=(engine)
       @@current_engine = engine
@@ -12,6 +12,7 @@ module GScript
       _d "GScript Initialize"
       actors = Actor.find(:all, :select => 'login')
       @status = GsStatus.new
+      @ready = nil
       @user = {}
       @actors = []
       @current = nil
@@ -45,6 +46,9 @@ module GScript
     def select_field(name, type, option={}, &verify)
       _gs_field(GsField::GsSelectField, name, type, option, &verify)
     end
+    def change(mode, options={})
+      @status.change(mode, options)
+    end
     def clear_fields
       @_gs_fields = []
     end
@@ -65,6 +69,18 @@ module GScript
         Category.find(:all,
                       :conditions => {:iname => cats})
       return categories.map(&:actors).flatten.uniq
+    end
+    def ready=(selected)
+      @status.option(:selection).each_slice(2) {|key, value|
+        if value == selected
+          @ready = key
+          break
+        end
+      }
+      unless @ready
+        raise "Bad ready selected. (#{selected})"
+      end
+      return @ready
     end
     def current=(actor)
       login = (actor.is_a?(Actor) ? actor.login : actor)
@@ -100,7 +116,7 @@ module GScript
         before.call
         script_info = @status.inspect
         _i "Execute (#{script_info})"
-        send(@status.method)
+        send(@status.option(:method))
       end while after.call
       return @status.mode
     rescue
@@ -126,11 +142,22 @@ module GScript
     end
     def _gs_status; @status end
     def _gs_save
+      unless @status.mode == :ready
+        raise 'Cannot save status. (not :ready mode)'
+      end
       @_gs_ready ||= Ready.new
       @_gs_ready.gscript =
         Marshal.dump({ :status => @status, :user => @user })
       @_gs_ready.action = info(:iname)
+      selection = []
+      @_gs_ready.selection =
+        @status.option(:selection).each_slice(2).map(&:last)
+      unless @status.option(:actor)
+        raise 'GScript(:ready): Ready actor not selected.'
+      end
+      @_gs_ready.actor = @status.option(:actor)._actor
       @_gs_ready.save!
+      return @_gs_ready
     end
 
     # Don't call this method on Thread.

@@ -10,5 +10,21 @@
 #  updated_at :datetime
 #
 
+require 'csv'
+
 class Ready < ActiveRecord::Base
+  belongs_to :actor
+
+  def selection=(selects)
+    self._selection = CSV.generate_line(selects)
+  end
+  def selection
+    CSV.parse_line(_selection)
+  end
+
+  def before_filter
+    unless message
+      self.message = 'Please select'
+    end
+  end
 end

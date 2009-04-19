@@ -31,10 +31,16 @@
 
 <h2>All Ready List</h2>
 <ul>
-  <% @readies.each do |ready| %>
+  <% @current_actor.readies.each do |ready| -%>
     <li>
-      <%= link_to ready.id, :action => :ready, :ready_id => ready.id %>
-    </li><br>
+       <%= ready.id %>:
+       <%  ready.selection.each do |value| -%>
+       <%=   link_to value,
+                     :action => :ready,
+                     :ready_id => ready.id,
+                     :selected => value %>
+       <%  end -%>
+     </li>
   <% end %>
 </ul>
 

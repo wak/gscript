@@ -3,12 +3,18 @@ class TwoTimesReady < GScript::GsActionBase
 
   def start
     @user[:count] = 0
-    @status.change(:ready, :method => :count)
+    change(:ready,
+           :method => :count,
+           :actor => @current,
+           :selection => [:hoge, 'HOGE'])
   end
   def count
     if (@user[:count] += 1) < 2
-      @status.change(:ready, :method => :count)
-      _d 'I Changed!'
+      change(:ready,
+             :method => :count,
+             :actor => @current,
+             :selection => [:hoge, 'HOGE',
+                            :piyo, 'PIYO'])
     end
   end
 end

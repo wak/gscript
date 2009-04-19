@@ -14,6 +14,7 @@ class GScriptController < ApplicationController
     @ready = Ready.find(params[:ready_id])
     @action = GScript.action(@ready.action)
     @action._gs_load(@ready)
+    @action.ready = params[:selected]
     @base = {
       :action => @action.info(:iname)
     }
@@ -58,7 +59,7 @@ class GScriptController < ApplicationController
         render :action => :finish
         return
       when :send_file
-        @file = @action._gs_status.file
+        @file = @action._gs_status.option(:file)
         send_file(@file.public_filename,
                   :filename => @file.filename,
                   :type => @file.content_type,
