@@ -4,8 +4,11 @@
 # Table name: readies
 #
 #  id         :integer(4)      not null, primary key
-#  action     :string(255)
-#  gscript    :text
+#  actor_id   :integer(4)      not null
+#  _selection :text            default(""), not null
+#  action     :string(255)     not null
+#  gscript    :text            default(""), not null
+#  message    :text            default(""), not null
 #  created_at :datetime
 #  updated_at :datetime
 #
