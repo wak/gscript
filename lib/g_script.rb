@@ -9,16 +9,6 @@ module GScript
   class ItemNotFound < StandardError
   end
   class << self
-    def init_actions
-      Action.destroy_all
-      Dir.glob("#{RAILS_ROOT}/lib/actions/*.rb").map {|path|
-        action = Action.new
-        name = path.slice(/\A.*?([a-z_]+)\.rb\z/, 1)
-        action.iname = name
-        action.actors = action_class(name)._gs_allowed_actors
-        action.save!
-      }
-    end
     def action(name)
       action_class(name).new
     end

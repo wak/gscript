@@ -1,0 +1,15 @@
+special-only:
+  actor: [special]
+  name: スペシャル
+
+fund:
+  actor: all
+  name: 資金
+
+power:
+  actor: all
+  name: 戦力
+
+population:
+  actor: all
+  name: 人口

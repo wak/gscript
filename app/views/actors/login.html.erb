@@ -2,11 +2,13 @@
   <label for="actor">アクター</label><br/>
   <%
     option_tags = Actor.all.map {|actor|
-      value, name = actor.id, actor.name
+      value, name = actor.login, actor.name
       sprintf("<option value=\"%s\">%s</option>", value, h(name))
     }
    %>
-  <%= select_tag 'actor_id', option_tags.join %>
+  <%= select_tag 'actor_login', option_tags.join %>
 
   <%= submit_tag 'ログイン' %></p>
+
+<p>Click <%= link_to 'HERE', :controller => :g_script, :action => :init_db %> to update GScript database.</p>
 <% end -%>

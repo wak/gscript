@@ -15,7 +15,7 @@
   <%= select_tag 'actor_id', option_tags.join %>
   <%= submit_tag 'CHANGE ACTOR' %>
 <% end -%>
-<p>Click <%= link_to 'HERE', :action => :init_actions %> to update GScript actor-action relations.</p>
+<p>Click <%= link_to 'HERE', :action => :init_db %> to update GScript actor-action relations.</p>
 
 <h2>These actions avaliable</h2>
 <p>The '<%=h @current_actor.name %>' actor can choose follow actions.</p>

@@ -1,5 +1,7 @@
 class AddTestActors < ActiveRecord::Migration
   def self.up
+    return
+
     actors = {
       :america => 'Americal',
       :japan => 'Japan',

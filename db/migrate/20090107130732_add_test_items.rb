@@ -1,5 +1,7 @@
 class AddTestItems < ActiveRecord::Migration
   def self.up
+    return
+
     items = [{:iname => 'fund'},
              {:iname => 'power'},
              {:iname => 'population'}]

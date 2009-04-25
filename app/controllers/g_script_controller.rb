@@ -1,4 +1,6 @@
 class GScriptController < ApplicationController
+  skip_filter :login_check, :only => :init_db
+
   def index
     @readies = Ready.find(:all)
   end
@@ -23,8 +25,8 @@ class GScriptController < ApplicationController
     render :text => 'Ready Not Found.'
   end
 
-  def init_actions
-    GScript.init_actions
+  def init_db
+    GScript::GsDB.init_db
     redirect_to :action => :index
   end
 

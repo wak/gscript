@@ -18,13 +18,17 @@ class ApplicationController < ActionController::Base
   def logged_in?
     !!@current_actor
   end
-  private
+
   def login_check
-    id = session[:actor_id]
+    login = session[:actor_login]
     unless id
       redirect_to :controller => :actors, :action => :login
       return
     end
-    @current_actor = Actor.find(session[:actor_id])
+    @current_actor = Actor.find_by_login(session[:actor_login])
+    unless @current_actor
+      reset_session
+      redirect_to :controller => :actors, :action => :login
+    end
   end
 end

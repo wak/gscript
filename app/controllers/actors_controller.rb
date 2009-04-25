@@ -1,6 +1,5 @@
 class ActorsController < ApplicationController
-  skip_filter(:login_check,
-              :only => [:login])
+  skip_filter :login_check, :only => :login
 
   def index
     if logged_in?
@@ -10,12 +9,12 @@ class ActorsController < ApplicationController
     end
   end
   def login
-    if !session[:actor_id].blank? && params[:change].blank?
+    if !session[:actor_login].blank? && params[:change].blank?
       redirect_to :controller => :g_script, :action => :index
       return
     end
     if request.post?
-      session[:actor_id] = params[:actor_id]
+      session[:actor_login] = params[:actor_login]
       redirect_to :action => :index
     end
   end
