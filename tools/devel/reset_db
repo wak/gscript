@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-mysqladmin --force -u root drop gsg_development
-mysqladmin -u root create gsg_development
+mysqladmin --force -u root drop gscript_development
+mysqladmin -u root create gscript_development
 
 rake db:migrate
