@@ -11,7 +11,7 @@ class File < GScript::GsActionBase
                  :list => @actors,
                  :message => 'Select actor')
     file_field(:file,
-               :nil => true,
+               :blank => true,
                :message => 'Input file') {|file|
       (input(:mode) == :upload) ? !!file : true
     }

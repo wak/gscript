@@ -3,18 +3,17 @@ class TwoTimesReady < GScript::GsActionBase
 
   def start
     @user[:count] = 0
-    change(:ready,
-           :method => :count,
-           :actor => @current,
-           :selection => [:hoge, 'HOGE'])
+    count
   end
   def count
-    if (@user[:count] += 1) < 2
+    current = @user[:count]
+    @user[:count] += 1
+    if current < 2
       change(:ready,
              :method => :count,
+             :message => "Last #{2-current}",
              :actor => @current,
-             :selection => [:hoge, 'HOGE',
-                            :piyo, 'PIYO'])
+             :selection => [:count, 'Click me!'])
     end
   end
 end

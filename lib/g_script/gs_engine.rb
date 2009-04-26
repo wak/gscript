@@ -72,7 +72,7 @@ module GScript
     end
     def ready=(selected)
       @status.option(:selection).each_slice(2) {|key, value|
-        if value == selected
+        if value.to_s == selected
           @ready = key
           break
         end

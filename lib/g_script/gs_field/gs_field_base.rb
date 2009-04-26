@@ -60,7 +60,7 @@ module GScript
         end
         if @verify
           e = @verify.call(@value)
-          if e
+          if e != true && e != nil
             if e.is_a?(String)
               @errors[:verify] = e
             else
