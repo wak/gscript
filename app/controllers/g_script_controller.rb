@@ -5,7 +5,7 @@ class GScriptController < ApplicationController
     @readies = Ready.find(:all)
   end
   def startup
-    @action = GScript.action(params[:gaction])
+    @action = GScript::GsActionSpace.action(params[:gaction])
     @base = {
       :action => @action.info(:iname)
     }
@@ -14,7 +14,7 @@ class GScriptController < ApplicationController
 
   def ready
     @ready = Ready.find(params[:ready_id])
-    @action = GScript.action(@ready.action)
+    @action = GScript::GsActionSpace.action(@ready.action)
     @action._gs_load(@ready)
     @action.ready = params[:selected]
     @base = {

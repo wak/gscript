@@ -1,16 +1,31 @@
 mit:
   name: MIT
-china:
-  name: China
+  category: school
+
 rits:
   name: Ritsumei
+  category: school
+
+china:
+  name: China
+  category: country
+
 america:
   name: Americal
-special:
-  name: SPECIAL
+  category: country
+
 japan:
   name: Japan
+  category: country
+
+special:
+  name: SPECIAL
+  category: special, country
+
 mitsubishi:
   name: Mitsubishi
+  category: company
+
 toyota:
   name: Toyota
+  category: company

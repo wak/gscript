@@ -1,5 +1,7 @@
 class AddTestCategories < ActiveRecord::Migration
   def self.up
+    return
+
     set = {
       :country => [:japan, :america, :china, :special],
       :school => [:rits, :mit],

@@ -1,10 +1,11 @@
 <h1>GScript Index</h1>
 <p>You are '<%=h @current_actor.name %>' actor.</p>
+<p>Your categories are [<%=h @current_actor.categories.map(&:name).join(', ') %>]. </p>
 
 <% form_tag url_for(:controller => :actors, :action => :login) do -%>
   <%
     option_tags = Actor.all.map {|actor|
-      value, name = actor.id, actor.name
+      value, name = actor.login, actor.name
       sprintf("<option value=\"%s\"%s>%s</option>",
               value,
               (actor == @current_actor) ? ' selected="selected"' : '',
@@ -12,7 +13,7 @@
     }
    %>
   <%= hidden_field_tag(:change, 'CHANGE') -%>
-  <%= select_tag 'actor_id', option_tags.join %>
+  <%= select_tag 'actor_login', option_tags.join %>
   <%= submit_tag 'CHANGE ACTOR' %>
 <% end -%>
 <p>Click <%= link_to 'HERE', :action => :init_db %> to update GScript database.</p>

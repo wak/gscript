@@ -4,6 +4,7 @@ module GScript
   class GsDB < GsBase
     class << self
       def init_db
+        init_categories
         init_actors
         init_actions
         init_items
@@ -11,6 +12,7 @@ module GScript
       def init_items
         Item.destroy_all
         load_gs_yaml('items').each {|iname, data|
+          iname = data['iname'] if data['iname']
           actors =
             if data['actor'] == 'all'
               Actor.all
@@ -27,39 +29,42 @@ module GScript
             data[:value_type] = 's'
             data[:svalue] = (data['default'] || '')
           end
-          data.delete('type')
-          data.delete('default')
-          data.delete('actor')
+          ['type', 'default', 'actor', 'iname'].each {|key|
+            data.delete(key)
+          }
           data[:iname] = iname
           actors.each {|actor|
-            actor.items.create!(data)
+            item = actor.items.find_by_iname(iname)
+            if item
+              item.update_attributes(data)
+            else
+              actor.items.create!(data)
+            end
           }
+        }
+      end
+      def init_categories
+        Category.destroy_all
+        load_gs_yaml('categories').each {|iname, data|
+          data[:iname] = iname
+          Category.create!(data)
         }
       end
       def init_actors
         Actor.destroy_all
+        categories = Hash.new {|h, k| h[k] = Array.new }
         load_gs_yaml('actors').each {|login, data|
-          Actor.create!(:login => login, :name => data['name'])
+          data[:login] = login
+          cs = data['category']
+          data.delete('category')
+          new_actor = Actor.create!(data)
+          strorary_to_ary(cs).each {|c| categories[c] << new_actor }
         }
-      end
-      def action_class(name)
-        name = name.underscore
-        @@actions ||= {}
-        return @@actions[name] if @@actions.key?(name)
-
-        path = "#{RAILS_ROOT}/lib/actions/#{name}.rb"
-        unless File.file?(path)
-          raise _e("Action file '#{path}' not found.")
-        end
-        GScript::GsActionSpace.class_eval(File.read(path), path)
-        begin
-          class_name = name.classify
-          action = GScript::GsActionSpace.const_get(class_name)
-        rescue
-          raise _e("Action '#{class_name}' not defined.")
-        end
-        raise "Action Not Defined" unless action
-        @@actions[name] = action
+        categories.each {|iname, actors|
+          c = Category.find_by_iname(iname)
+          raise _e("Bad category (actors.yml): '#{iname}'") unless c
+          c.actors = actors.uniq
+        }
       end
       def init_actions
         Action.destroy_all
@@ -67,7 +72,8 @@ module GScript
           action = Action.new
           name = path.slice(/\A.*?([a-z_]+)\.rb\z/, 1)
           action.iname = name
-          action.actors = action_class(name)._gs_allowed_actors
+          action.actors =
+            GScript::GsActionSpace.action_class(name)._gs_allowed_actors
           action.save!
         }
       end
@@ -76,7 +82,7 @@ module GScript
       def strorary_to_ary(data)
         case data
         when String
-          CSV.parse_line(text).map(&:strip)
+          CSV.parse_line(data).map(&:strip)
         when Array
           data.map(&:to_s)
         end
