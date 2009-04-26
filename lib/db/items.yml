@@ -1,15 +1,27 @@
 special-only:
-  actor: [special]
+  type: string
+  actor: special
+  default: I am special
   name: スペシャル
 
 fund:
+  type: int
+  default: 100
   actor: all
   name: 資金
 
 power:
+  type: int
   actor: all
   name: 戦力
 
 population:
+  type: int
   actor: all
   name: 人口
+
+america-and-japan-only:
+  type: string
+  actor: america, japan
+  default: 日本とアメリカだけ
+  name: 日本とアメリカだけ

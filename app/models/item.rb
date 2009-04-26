@@ -19,20 +19,22 @@ class Item < ActiveRecord::Base
 
   def value
     case value_type
-    when 'i': return ivalue
-    when 's': return svalue
+    when 'i'
+      return ivalue
+    when 's'
+      return svalue
     else
       raise "Unknown value type '#{value_type}'"
     end
   end
   def value=(v)
-    case v
-    when String
-      self.svalue = v
-      self.value_type = 's'
-    when Fixnum, Bignum
+    case value_type
+    when 'i'
       self.ivalue = v
-      self.value_type = 'i'
+    when 's'
+      self.ivalue = v
+    else
+      raise 'No here'
     end
   end
 end

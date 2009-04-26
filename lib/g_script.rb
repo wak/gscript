@@ -1,5 +1,6 @@
 require 'pp'
 require 'cgi'
+require 'g_script/gs_db.rb'
 
 module GScript
   include GScript::GsBaseModule
@@ -10,26 +11,7 @@ module GScript
   end
   class << self
     def action(name)
-      action_class(name).new
-    end
-    def action_class(name)
-      name = name.underscore
-      @@actions ||= {}
-      return @@actions[name] if @@actions.key?(name)
-
-      path = "#{RAILS_ROOT}/lib/actions/#{name}.rb"
-      unless File.file?(path)
-        raise _e("Action file '#{path}' not found.")
-      end
-      GScript::GsActionSpace.class_eval(File.read(path), path)
-      begin
-        class_name = name.classify
-        action = GScript::GsActionSpace.const_get(class_name)
-      rescue
-        raise _e("Action '#{class_name}' not defined.")
-      end
-      raise "Action Not Defined" unless action
-      @@actions[name] = action
+      GsDb.action_class(name).new
     end
   end
 end
