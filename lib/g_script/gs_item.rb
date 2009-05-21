@@ -24,6 +24,7 @@ module GScript
       return equal?(obj)
     end
     def initialize(actor, iname)
+      @old_value = nil
       @actor = actor
       @_item = @actor.items.find_by_iname(iname.to_s)
       unless @_item
@@ -32,9 +33,17 @@ module GScript
       end
     end
     def value=(v)
+      old_value = @_item.value
       @_item.value = v
       @_item.save!
+      unless @old_value
+        @old_value = old_value
+        GScript.current_engine._gs_changes.add_item(self)
+      end
       return @_item.value
+    end
+    def old_value
+      @old_value || value
     end
     def to_s
       value.to_s
@@ -50,7 +59,7 @@ module GScript
     end
     def marshal_load(data)
       login, iname = *data
-      @actor = GsEngine.current_engine.actor(login)
+      @actor = GScript.current_engine.actor(login)
       @_item = @actor.send(iname)._item
     end
   end

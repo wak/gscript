@@ -1,13 +1,13 @@
 module GScript
   class GsEngine < GsBase
-    attr_reader :_gs_fields, :ready
+    attr_reader :_gs_fields, :ready, :_gs_changes
 
-    def self.current_engine=(engine)
-      @@current_engine = engine
-    end
-    def self.current_engine
-      @@current_engine
-    end
+#     def self.current_engine=(engine)
+#       @@current_engine = engine
+#     end
+#     def self.current_engine
+#       @@current_engine
+#     end
     def initialize
       _d "GScript Initialize"
       actors = Actor.find(:all, :select => 'login')
@@ -20,6 +20,7 @@ module GScript
       @_gs_ready = nil
       @_gs_fields = []
       @actorhash = {}
+      @_gs_changes = GsChanges.new
       actors.each {|actor|
         gactor = GsActor.new(actor.login)
         @actors << gactor
@@ -97,6 +98,7 @@ module GScript
       @_gs_fields << klass.new(name, type, option, &verify)
     end
     def _gs_execute(&block)
+      GScript.current_engine = self
       before = Proc.new {
         @status.changed = false
       }
@@ -122,6 +124,8 @@ module GScript
     rescue
       _e "Errors in script (#{script_info})"
       raise
+    ensure
+      GScript.current_engine = self
     end
     def _gs_input_set(key, val)
       field = @_gs_fields.find {|f| f == key }
@@ -165,9 +169,9 @@ module GScript
     # Please run Rails with shared-nothing architecture.
     def _gs_load(ready)
       @_gs_ready = ready
-      self.class.current_engine = self
+      GScript.current_engine = self
       tmp = Marshal.load(ready.gscript)
-      self.class.current_engine = nil
+      GScript.current_engine = nil
       @status = tmp[:status]
       @user = tmp[:user]
       _d "Load (#{@status.inspect})"

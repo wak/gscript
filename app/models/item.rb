@@ -32,7 +32,7 @@ class Item < ActiveRecord::Base
     when 'i'
       self.ivalue = v
     when 's'
-      self.ivalue = v
+      self.svalue = v
     else
       raise 'No here'
     end

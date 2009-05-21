@@ -25,8 +25,11 @@ module GScript
     def marshal_dump
       _actor.login
     end
+    def to_s
+      _actor.name
+    end
     def marshal_load(login)
-      gactor = GsEngine.current_engine.actor(login)
+      gactor = GScript.current_engine.actor(login)
       @_actor = gactor._actor
       @_items = gactor._items
     end
