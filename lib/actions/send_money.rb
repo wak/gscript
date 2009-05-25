@@ -23,6 +23,8 @@ class SendMoney < GScript::GsActionBase
     @user[:much] = input(:much)
 
     @current.fund -= input(:much)
+    @status.log.active_actor = @current
+    @status.log.passive_actor = input(:to)
 
     @status.change(:ready,
                    :actor => input(:to),

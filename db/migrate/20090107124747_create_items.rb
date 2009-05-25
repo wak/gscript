@@ -4,10 +4,10 @@ class CreateItems < ActiveRecord::Migration
       t.references :actor, :null => false
       t.string  :iname,    :null => false
       t.string  :name,     :null => false, :default => ''
-      t.integer :ivalue,   :null => false, :default => 0
-      t.string  :svalue,   :null => false, :default => ''
-      t.string(:value_type,
-               :length => 1, :null => false, :default => 'i')
+      t.integer :v_int
+      t.string  :v_string
+      t.boolean :v_bool
+      t.string  :_value_type, :null => false
       t.timestamps
     end
 #     execute <<-EOS

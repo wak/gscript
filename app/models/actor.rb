@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090411123850
+# Schema version: 20090525100458
 #
 # Table name: actors
 #
@@ -14,6 +14,14 @@ class Actor < ActiveRecord::Base
   has_many :items
   has_many :files, :class_name => 'GFile', :order => 'id DESC'
   has_many :readies, :dependent => :destroy
+
+  has_many(:action_log_actors,
+           :conditions => {:active => true})
+  has_many(:logs,
+           :source => :action_log,
+           :uniq => true,
+           :order => 'id DESC',
+           :through => :action_log_actors)
 
   has_many :actor_actions
   has_many(:actions,

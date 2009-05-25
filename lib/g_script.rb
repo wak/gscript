@@ -1,6 +1,8 @@
 require 'pp'
 require 'cgi'
 
+# Please run Rails with shared-nothing architecture.
+
 module GScript
   include GScript::GsBaseModule
 

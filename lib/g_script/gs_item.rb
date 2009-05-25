@@ -1,6 +1,6 @@
 module GScript
   class GsItem < GsBase
-    attr_reader :_item, :actor
+    attr_reader :_gs_item, :actor
 
     ['-', '+', '*', '/', '%',
      '<', '>', '<=', '>='].each {|op|
@@ -26,21 +26,22 @@ module GScript
     def initialize(actor, iname)
       @old_value = nil
       @actor = actor
-      @_item = @actor.items.find_by_iname(iname.to_s)
-      unless @_item
+      @_gs_item = @actor.items.find_by_iname(iname.to_s)
+      unless @_gs_item
         raise(ItemNotFound,
               _e("Item not found (actor: #{actor.login}, item: #{iname})"))
       end
     end
     def value=(v)
-      old_value = @_item.value
-      @_item.value = v
-      @_item.save!
+      old_value = @_gs_item.value
+      @_gs_item.value = v
+      @_gs_item.save!
       unless @old_value
         @old_value = old_value
-        GScript.current_engine._gs_changes.add_item(self)
+        GScript.current_engine.
+          status.log.change(self, old_value, value)
       end
-      return @_item.value
+      return @_gs_item.value
     end
     def old_value
       @old_value || value
@@ -49,18 +50,18 @@ module GScript
       value.to_s
     end
     def method_missing(name, *args)
-      if @_item.respond_to?(name)
-        return @_item.send(name, *args)
+      if @_gs_item.respond_to?(name)
+        return @_gs_item.send(name, *args)
       end
       super
     end
     def marshal_dump
-      [@actor.login, @_item.iname]
+      [@actor.login, @_gs_item.iname]
     end
     def marshal_load(data)
       login, iname = *data
       @actor = GScript.current_engine.actor(login)
-      @_item = @actor.send(iname)._item
+      @_gs_item = @actor.send(iname)._gs_item
     end
   end
 end

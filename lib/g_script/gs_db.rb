@@ -22,12 +22,12 @@ module GScript
                            :login => strorary_to_ary(data['actor'])
                          })
             end
+          data[:value_type] = data['type']
+          data[:value] = 0
           if data['type'] == 'int'
-            data[:value_type] = 'i'
-            data[:ivalue] = (data['default'] || 0).to_i
+            data[:value] = (data['default'] || 0).to_i
           else
-            data[:value_type] = 's'
-            data[:svalue] = (data['default'] || '')
+            data[:value] = (data['default'] || '')
           end
           ['type', 'default', 'actor', 'iname'].each {|key|
             data.delete(key)
@@ -38,7 +38,10 @@ module GScript
             if item
               item.update_attributes(data)
             else
-              actor.items.create!(data)
+              new_item = actor.items.new
+              new_item.value_type = data[:value_type]
+              new_item.attributes = data
+              new_item.save!
             end
           }
         }
@@ -71,9 +74,9 @@ module GScript
         Dir.glob("#{RAILS_ROOT}/lib/actions/*.rb").map {|path|
           action = Action.new
           name = path.slice(/\A.*?([a-z_]+)\.rb\z/, 1)
-          action.iname = name
-          action.actors =
-            GScript::GsActionSpace.action_class(name)._gs_allowed_actors
+          klass = GScript::GsActionSpace.action_class(name)
+          action.iname = klass._gs_info(:iname)
+          action.actors = klass._gs_allowed_actors
           action.save!
         }
       end

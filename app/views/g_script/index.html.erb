@@ -45,6 +45,30 @@
   <% end %>
 </ul>
 
+<h2>Auto Log</h2>
+<table border="1">
+  <% @current_actor.logs.each do |log| %>
+    <tr>
+      <th><%= log.action.name %></th>
+      <th><%= log.updated_at %></th>
+      <th><%= log.active_actors.map(&:name).join(', ') %></th>
+      <th>=></th>
+      <th><%= log.passive_actors.map(&:name).join(', ') %></th>
+    </tr>
+    <% log.changes.each do |c| %>
+      <tr>
+        <td><%= c.item.name %></td>
+        <td align="center">
+          <%= sprintf("%+d", c.before_value - c.after_value) %>
+        </td>
+        <td><%= c.before_value %></td>
+        <td> => </td>
+        <td><%= c.after_value %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
 <h2>All Actions List</h2>
 <ul>
   <% Action.all.each do |action| -%>

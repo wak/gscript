@@ -1,10 +1,11 @@
 module GScript
   class GsStatus < GsBase
-    attr_reader :mode
+    attr_reader :mode, :log
     attr_writer :changed
 
     def initialize
       reset
+      @log = GsActionLog.new
     end
     def change(mode, options={})
       unless [:continue, :input, :ready,
@@ -37,6 +38,9 @@ module GScript
     end
     def option(name)
       @options[name]
+    end
+    def _gs_action=(t)
+      @log = t
     end
   end
 end

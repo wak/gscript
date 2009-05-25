@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090411123850
+# Schema version: 20090525100458
 #
 # Table name: actor_categories
 #

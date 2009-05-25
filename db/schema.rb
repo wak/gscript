@@ -9,7 +9,36 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090411123850) do
+ActiveRecord::Schema.define(:version => 20090525100458) do
+
+  create_table "action_log_actors", :force => true do |t|
+    t.integer  "action_log_id", :null => false
+    t.integer  "actor_id",      :null => false
+    t.boolean  "active",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "action_log_changes", :force => true do |t|
+    t.integer  "action_log_id", :null => false
+    t.integer  "item_id",       :null => false
+    t.integer  "actor_id",      :null => false
+    t.string   "_value_type",   :null => false
+    t.integer  "vb_int"
+    t.integer  "va_int"
+    t.string   "vb_string"
+    t.string   "va_string"
+    t.boolean  "vb_bool"
+    t.boolean  "va_bool"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "action_logs", :force => true do |t|
+    t.integer  "action_id",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "actions", :force => true do |t|
     t.string   "iname",      :null => false
@@ -58,10 +87,11 @@ ActiveRecord::Schema.define(:version => 20090411123850) do
   create_table "items", :force => true do |t|
     t.integer  "actor_id",                    :null => false
     t.string   "iname",                       :null => false
-    t.string   "name",       :default => "",  :null => false
-    t.integer  "ivalue",     :default => 0,   :null => false
-    t.string   "svalue",     :default => "",  :null => false
-    t.string   "value_type", :default => "i", :null => false
+    t.string   "name",        :default => "", :null => false
+    t.integer  "v_int"
+    t.string   "v_string"
+    t.boolean  "v_bool"
+    t.string   "_value_type",                 :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

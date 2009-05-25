@@ -1,6 +1,6 @@
 module GScript
   class GsEngine < GsBase
-    attr_reader :_gs_fields, :ready, :_gs_changes
+    attr_reader :_gs_fields, :ready, :status
 
 #     def self.current_engine=(engine)
 #       @@current_engine = engine
@@ -20,7 +20,6 @@ module GScript
       @_gs_ready = nil
       @_gs_fields = []
       @actorhash = {}
-      @_gs_changes = GsChanges.new
       actors.each {|actor|
         gactor = GsActor.new(actor.login)
         @actors << gactor
@@ -28,12 +27,6 @@ module GScript
         #instance_variable_set("@#{actor.login}", gactor)
       }
       return nil
-    end
-    def info(key = nil)
-      attrs = {
-        :iname => self.class.name.slice(/\A.*?([a-z0-9_]+)\z/i, 1)
-      }
-      return key ? attrs[key] : attrs
     end
     def method_missing(name, *args)
       super
@@ -152,7 +145,7 @@ module GScript
       @_gs_ready ||= Ready.new
       @_gs_ready.gscript =
         Marshal.dump({ :status => @status, :user => @user })
-      @_gs_ready.action = info(:iname)
+      @_gs_ready.action = _gs_info(:iname)
       selection = []
       @_gs_ready.selection =
         @status.option(:selection).each_slice(2).map(&:last)
@@ -160,13 +153,11 @@ module GScript
         raise 'GScript(:ready): Ready actor not selected.'
       end
       @_gs_ready.message = @status.option(:message)
-      @_gs_ready.actor = @status.option(:actor)._actor
+      @_gs_ready.actor = @status.option(:actor)._gs_actor
       @_gs_ready.save!
       return @_gs_ready
     end
 
-    # Don't call this method on Thread.
-    # Please run Rails with shared-nothing architecture.
     def _gs_load(ready)
       @_gs_ready = ready
       GScript.current_engine = self

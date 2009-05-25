@@ -7,7 +7,7 @@ class GScriptController < ApplicationController
   def startup
     @action = GScript::GsActionSpace.action(params[:gaction])
     @base = {
-      :action => @action.info(:iname)
+      :action => @action._gs_info(:iname)
     }
     do_common
   end
@@ -18,7 +18,7 @@ class GScriptController < ApplicationController
     @action._gs_load(@ready)
     @action.ready = params[:selected]
     @base = {
-      :action => @action.info(:iname)
+      :action => @action._gs_info(:iname)
     }
     do_common
   rescue ActiveRecord::RecordNotFound
@@ -39,7 +39,7 @@ class GScriptController < ApplicationController
       when :input
         if inputed || request.get?
           render :action => :input
-          return
+          break
         else
           inputed = true
           params.each {|key, val|
@@ -48,28 +48,30 @@ class GScriptController < ApplicationController
           @params = params
           unless @action._gs_input_valid?
             render :action => :input
-            return
+            break
           end
-          # not return
+          # not break
         end
       when :ready
         @ready = @action._gs_save
+        @action.status.log.write
         render :action => :ready
-        return
+        break
       when :finish, :cancel
         @ready.destroy if @ready
+        @action.status.log.write
         render :action => :finish
-        return
+        break
       when :send_file
         @file = @action._gs_status.option(:file)
         send_file(@file.public_filename,
                   :filename => @file.filename,
                   :type => @file.content_type,
                   :disposition => 'inline')
-        return
+        break
       else
         render :text => "Bad GScript status(=#{@action._gs_status.mode})"
-        return
+        break
       end
     end
   end

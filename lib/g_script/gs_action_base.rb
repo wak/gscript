@@ -29,9 +29,18 @@ module GScript
         categories.each {|c| actors += c.actors }
         return actors.uniq
       end
+      def _gs_info(key = nil)
+        attrs = {
+          :iname => self.name.slice(/\A.*?([a-z0-9_]+)\z/i, 1)
+        }
+        return key ? attrs[key] : attrs
+      end
+    end
+    def _gs_info(key = nil)
+      self.class._gs_info(key)
     end
     def action_name
-      info(:iname)
+      _gs_info(:iname)
     end
   end
 end
