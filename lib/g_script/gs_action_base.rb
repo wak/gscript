@@ -10,6 +10,9 @@ module GScript
       def allow_all
         write_inheritable_attribute(:allow_all, true)
       end
+      def action_name(name)
+        write_inheritable_attribute(:action_name, name)
+      end
 
       def _gs_allowed_actors
         allow_all = read_inheritable_attribute(:allow_all)
@@ -30,9 +33,9 @@ module GScript
         return actors.uniq
       end
       def _gs_info(key = nil)
-        attrs = {
-          :iname => self.name.slice(/\A.*?([a-z0-9_]+)\z/i, 1)
-        }
+        attrs = {}
+        attrs[:iname] = self.name.slice(/\A.*?([a-z0-9_]+)\z/i, 1)
+        attrs[:name] = read_inheritable_attribute(:action_name) || attrs[:iname]
         return key ? attrs[key] : attrs
       end
     end
@@ -40,7 +43,7 @@ module GScript
       self.class._gs_info(key)
     end
     def action_name
-      _gs_info(:iname)
+      _gs_info(:name)
     end
   end
 end

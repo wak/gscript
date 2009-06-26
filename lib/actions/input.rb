@@ -1,5 +1,6 @@
 class Input < GScript::GsActionBase
   allow_all
+  action_name 'フォーム生成テスト'
 
   def start
     select_field(:actor, :actor,

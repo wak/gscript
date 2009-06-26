@@ -14,8 +14,4 @@ class Action < ActiveRecord::Base
   has_many :actors, :through => :actor_actions
 
   has_many :action_logs, :dependent => :destroy
-
-  def name
-    iname
-  end
 end

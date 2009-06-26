@@ -23,7 +23,7 @@
 <ul>
   <% @current_actor.actions.each do |action| -%>
     <li>
-      <%= link_to action.iname,
+      <%= link_to action.name,
                   :action => :startup,
                   :gaction => action.iname %>
     </li>
@@ -46,27 +46,26 @@
 </ul>
 
 <h2>Auto Log</h2>
+
 <table border="1">
-  <% @current_actor.logs.each do |log| %>
+  <tr>
+    <th>Action</th>
+    <th>Information</th>
+  </tr>
+  <% ActionLog.find(:all, :order => 'id DESC').each do |log| -%>
     <tr>
-      <th><%= log.action.name %></th>
-      <th><%= log.updated_at %></th>
-      <th><%= log.active_actors.map(&:name).join(', ') %></th>
-      <th>=></th>
-      <th><%= log.passive_actors.map(&:name).join(', ') %></th>
+      <td><%=h log.action.name %></td>
+      <%
+         t = []
+         log.changes.each {|c|
+           t << h(sprintf("%s.%s: %s => %s",
+                          c.actor.name, c.item.name,
+                          c.before_value, c.after_value))
+         }
+      -%>
+      <td><%= t.join("<br>") %></td>
     </tr>
-    <% log.changes.each do |c| %>
-      <tr>
-        <td><%= c.item.name %></td>
-        <td align="center">
-          <%= sprintf("%+d", c.before_value - c.after_value) %>
-        </td>
-        <td><%= c.before_value %></td>
-        <td> => </td>
-        <td><%= c.after_value %></td>
-      </tr>
-    <% end %>
-  <% end %>
+  <% end -%>
 </table>
 
 <h2>All Actions List</h2>

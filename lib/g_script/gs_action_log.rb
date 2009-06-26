@@ -16,17 +16,19 @@ module GScript
       @_gs_action_log = nil
     end
     def change(item, before, after)
-      change = @changes[item.iname]
+      key = "#{item.actor.login}.#{item.iname}"
+      change = @changes[key]
       unless change
-        change = @changes[item.iname] = {}
+        change = @changes[key] = {}
         change[:item_id] = item._gs_item.id
         change[:actor_id] = item.actor._gs_actor.id
         change[:value_type]  = item.value_type
         change[:before_value] = before
+        _d sprintf("[debug] %s.%s", item.actor.name, item.name)
       end
       change[:after_value] = after
     end
-    def write(wait = false)
+    def write
       @_gs_action_log ||= ActionLog.new
 
       actives = active_actors
@@ -46,7 +48,7 @@ module GScript
         change.value_type = c[:value_type]
         change.attributes = c
         m = sprintf("%s.%s: %s => %s",
-                    c[:actor], item,
+                    c[:actor_id], item,
                     c[:before_value], c[:after_value])
         _d m
       }

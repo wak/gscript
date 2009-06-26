@@ -3,29 +3,29 @@ mit:
   category: school
 
 rits:
-  name: Ritsumei
+  name: 立命館
   category: school
 
 china:
-  name: China
+  name: 中国
   category: country
 
 america:
-  name: Americal
+  name: アメリカ
   category: country
 
 japan:
-  name: Japan
+  name: 日本
   category: country
 
 special:
-  name: SPECIAL
+  name: 特殊
   category: special, country
 
 mitsubishi:
-  name: Mitsubishi
+  name: 三菱
   category: company
 
 toyota:
-  name: Toyota
+  name: トヨタ
   category: company
