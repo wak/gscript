@@ -5,7 +5,7 @@ class CreateReadies < ActiveRecord::Migration
 
       t.text   :_selection, :null => false
       t.string :action,     :null => false
-      t.text   :gscript,    :null => false
+      t.binary :gscript,    :limit => 1.megabytes, :null => false
       t.text   :message,    :null => false
       t.timestamps
     end
