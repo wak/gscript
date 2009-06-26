@@ -113,6 +113,7 @@ module GScript
         _i "Execute (#{script_info})"
         send(@status.option(:method))
       end while after.call
+      @status.log.write if [:ready, :finish, :cancel].include?(@status.mode)
       return @status.mode
     rescue
       _e "Errors in script (#{script_info})"

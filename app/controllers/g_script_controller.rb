@@ -54,12 +54,12 @@ class GScriptController < ApplicationController
         end
       when :ready
         @ready = @action._gs_save
-        @action.status.log.write
+#        @action.status.log.write
         render :action => :ready
         break
       when :finish, :cancel
         @ready.destroy if @ready
-        @action.status.log.write
+ #       @action.status.log.write
         render :action => :finish
         break
       when :send_file
