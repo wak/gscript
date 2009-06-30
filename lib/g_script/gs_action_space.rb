@@ -5,7 +5,7 @@ module GScript
         action_class(name).new
       end
       def action_class(name)
-        name = name.underscore
+        name = name.to_s.underscore
         @@actions ||= {}
         return @@actions[name] if @@actions.key?(name)
 
@@ -14,6 +14,7 @@ module GScript
           raise _e("Action file '#{path}' not found.")
         end
         class_eval(::File.read(path), path)
+        _d "load action: #{name}"
         begin
           class_name = name.classify
           action = const_get(class_name)

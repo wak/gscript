@@ -11,10 +11,18 @@ module GScript
   class ItemNotFound < StandardError
   end
 
-  def self.current_engine=(engine)
-    @@current_engine = engine
-  end
-  def self.current_engine
-    @@current_engine
+  class << self
+    def current_engine=(engine)
+      @@current_engine = engine
+    end
+    def current_engine
+      @@current_engine
+    end
+    def action(action_name)
+      GScript::GsActionSpace.action(action_name)
+    end
+    def action_class(action_name)
+      GScript::GsActionSpace.action_class(action_name)
+    end
   end
 end

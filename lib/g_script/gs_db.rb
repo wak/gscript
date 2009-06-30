@@ -76,7 +76,6 @@ module GScript
           name = path.slice(/\A.*?([a-z_]+)\.rb\z/, 1)
           klass = GScript::GsActionSpace.action_class(name)
           action.iname = klass._gs_info(:iname)
-          action.name = klass._gs_info(:name)
           action.actors = klass._gs_allowed_actors
           action.save!
         }

@@ -14,7 +14,7 @@ class GScriptController < ApplicationController
 
   def ready
     @ready = Ready.find(params[:ready_id])
-    @action = GScript::GsActionSpace.action(@ready.action)
+    @action = GScript.action(@ready.action)
     @action._gs_load(@ready)
     @action.ready = params[:selected]
     @base = {

@@ -14,4 +14,14 @@ class Action < ActiveRecord::Base
   has_many :actors, :through => :actor_actions
 
   has_many :action_logs, :dependent => :destroy
+
+  def gaction
+    @action ||= GScript.action(iname)
+  end
+  def name
+    gaction.action_name
+  end
+  def desc
+    gaction.action_desc
+  end
 end
