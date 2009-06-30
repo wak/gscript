@@ -5,6 +5,9 @@
 #
 #  id         :integer(4)      not null, primary key
 #  action_id  :integer(4)      not null
+#  actor_id   :integer(4)      not null
+#  canceled   :boolean(1)      not null
+#  status     :string(255)     not null
 #  created_at :datetime
 #  updated_at :datetime
 #
@@ -14,6 +17,7 @@ class ActionLog < ActiveRecord::Base
            :class_name => 'ActionLogChange',
            :dependent => :destroy)
   belongs_to :action
+  belongs_to :actor
 
   has_many(:_log_actors_active,
            :class_name => 'ActionLogActor',

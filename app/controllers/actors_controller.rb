@@ -10,16 +10,16 @@ class ActorsController < ApplicationController
   end
   def login
     if !session[:actor_login].blank? && params[:change].blank?
-      redirect_to :controller => :g_script, :action => :index
+      redirect_to gscript_path
       return
     end
     if request.post?
       session[:actor_login] = params[:actor_login]
-      redirect_to :action => :index
+      redirect_to root_path
     end
   end
   def logout
     reset_session
-    redirect_to :action => :index
+    redirect_to root_path
   end
 end

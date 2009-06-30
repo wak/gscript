@@ -1,6 +1,7 @@
 class TwoTimesReady < GScript::GsActionBase
   allow_category :country
-  action_name '2回承認すると終了します'
+  action_name 'TwoTimesReady'
+  action_desc '2回承認すると終了します．'
 
   def start
     @user[:count] = 0

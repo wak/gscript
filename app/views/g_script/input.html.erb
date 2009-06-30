@@ -1,10 +1,13 @@
 <b><%= link_to 'Return to Index', :action => :index %></b>
 <h1>Please Input!</h1>
-<% url = @ready ? '/g_script/ready' : '/g_script/startup' %>
+<%
+   url = if @ready
+           gscript_ready_path(:id => @ready)
+         else
+           gscript_start_path(:gaction => @base[:action])
+         end
+%>
 <% form_tag(url, :multipart => true) do -%>
-  <%= hidden_field_tag :gaction, @base[:action] %>
-  <%= hidden_field_tag(:ready_id, @ready.id) if @ready %>
-
   <% @action._gs_fields.each do |field| %>
   <%=  field.generate %> <br>
   <%   unless field.errors.empty? -%>

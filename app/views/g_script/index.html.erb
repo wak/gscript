@@ -2,7 +2,7 @@
 <p>You are '<%=h @current_actor.name %>' actor.</p>
 <p>Your categories are [<%=h @current_actor.categories.map(&:name).join(', ') %>]. </p>
 
-<% form_tag url_for(:controller => :actors, :action => :login) do -%>
+<% form_tag url_for(login_path) do -%>
   <%
     option_tags = Actor.all.map {|actor|
       value, name = actor.login, actor.name
@@ -24,8 +24,7 @@
   <% @current_actor.actions.each do |action| -%>
     <li>
       <%= link_to action.name,
-                  :action => :startup,
-                  :gaction => action.iname %>
+                  gscript_start_path(:gaction => action.iname) %>
       --
       <%=h action.desc %>
     </li>
@@ -39,23 +38,39 @@
        [<%=h ready.id %>] <%=h ready.message %> -
        <%  ready.selection.each do |value| -%>
        <%=   link_to value,
-                     :action => :ready,
-                     :ready_id => ready.id,
-                     :selected => value %>
+                     gscript_ready_path(:id => ready,
+                                        :selected => value) %>
        <%  end -%>
      </li>
   <% end %>
 </ul>
 
-<h2>Auto Log</h2>
-
+<h2>Status</h2>
 <table border="1">
   <tr>
+    <th>Name</th>
+    <th>Value</th>
+  </tr>
+  <% @current_actor.items.each do |item| -%>
+    <tr>
+      <td><%=h item.name %></td>
+      <td><%=h item.value %></td>
+    </tr>
+  <% end -%>
+</table>
+
+<h2>Action Log</h2>
+<table border="1">
+  <tr>
+    <th>Actor</th>
     <th>Action</th>
-    <th>Information</th>
+    <th>Changes</th>
+    <th>Status</th>
+    <th>CALCEL</th>
   </tr>
   <% ActionLog.find(:all, :order => 'id DESC').each do |log| -%>
     <tr>
+      <td><%=h log.actor.name %></td>
       <td><%=h log.action.name %></td>
       <%
          t = []
@@ -66,6 +81,16 @@
          }
       -%>
       <td><%= t.join("<br>") %></td>
+      <td><%= log.status %></td>
+      <td>
+        <% if log.canceled? %>
+          CANCELED
+        <% else %>
+          <% form_tag(gscript_cancel_path(:id => log)) do -%>
+            <%= submit_tag "CANCEL" %>
+          <% end -%>
+        <% end -%>
+      </td>
     </tr>
   <% end -%>
 </table>
@@ -73,6 +98,7 @@
 <h2>All Actions List</h2>
 <ul>
   <% Action.all.each do |action| -%>
-    <li><%= action.iname %></li>
+    <li><%=h action.name %> -- <%=h action.desc %></li>
   <% end %>
 </ul>
+

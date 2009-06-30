@@ -1,6 +1,7 @@
 class Input < GScript::GsActionBase
   allow_all
-  action_name 'フォーム生成テスト'
+  action_name 'フォームサンプル'
+  action_desc 'フォームサンプルです．エラーも出たりします．'
 
   def start
     select_field(:actor, :actor,

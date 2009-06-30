@@ -4,7 +4,7 @@ class GScriptController < ApplicationController
   def index
     @readies = Ready.find(:all)
   end
-  def startup
+  def start
     @action = GScript::GsActionSpace.action(params[:gaction])
     @base = {
       :action => @action._gs_info(:iname)
@@ -13,7 +13,7 @@ class GScriptController < ApplicationController
   end
 
   def ready
-    @ready = Ready.find(params[:ready_id])
+    @ready = Ready.find(params[:id])
     @action = GScript.action(@ready.action)
     @action._gs_load(@ready)
     @action.ready = params[:selected]
@@ -27,6 +27,20 @@ class GScriptController < ApplicationController
 
   def init_db
     GScript::GsDB.init_db
+    redirect_to :action => :index
+  end
+
+  def cancel
+    @log = ActionLog.find(params[:id])
+    ActiveRecord::Base.transaction do
+      @log.changes.each {|change|
+        item = change.item
+        item.value -= (change.after_value - change.before_value)
+        item.save!
+      }
+      @log.canceled = true
+      @log.save!
+    end
     redirect_to :action => :index
   end
 

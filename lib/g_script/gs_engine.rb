@@ -2,12 +2,6 @@ module GScript
   class GsEngine < GsBase
     attr_reader :_gs_fields, :ready, :status
 
-#     def self.current_engine=(engine)
-#       @@current_engine = engine
-#     end
-#     def self.current_engine
-#       @@current_engine
-#     end
     def initialize
       _d "GScript Initialize"
       actors = Actor.find(:all, :select => 'login')
@@ -24,7 +18,6 @@ module GScript
         gactor = GsActor.new(actor.login)
         @actors << gactor
         @actorhash[actor.login] = gactor
-        #instance_variable_set("@#{actor.login}", gactor)
       }
       return nil
     end
@@ -51,7 +44,6 @@ module GScript
     end
     def actor(act)
       @actorhash[act.to_s]
-      #instance_variable_get("@#{actor}")
     end
     def actors(*acts)
       return @actors if acts.empty?
@@ -91,6 +83,10 @@ module GScript
       @_gs_fields << klass.new(name, type, option, &verify)
     end
     def _gs_execute(&block)
+      if @status.mode == :start
+        @status.log.active_actor = @current
+        @status.change(:continue, :method => :start)
+      end
       GScript.current_engine = self
       before = Proc.new {
         @status.changed = false
@@ -113,7 +109,10 @@ module GScript
         _i "Execute (#{script_info})"
         send(@status.option(:method))
       end while after.call
-      @status.log.write if [:ready, :finish, :cancel].include?(@status.mode)
+      if [:finish, :cancel].include?(@status.mode)
+        @status.log.status = @status.mode.to_s
+        @status.log.write
+      end
       return @status.mode
     rescue
       _e "Errors in script (#{script_info})"

@@ -1,5 +1,27 @@
 ActionController::Routing::Routes.draw do |map|
-  map.root(:controller => 'actors', :action => 'index')
+  map.root(:controller => 'actors',
+           :action => 'index')
+  map.login('/login',
+            :controller => 'actors', :action => 'login')
+  map.logout('/logout',
+             :controller => 'actors', :action => 'logout')
+  map.gscript('/gscript/:action',
+              :controller => 'g_script',
+              :defaults => { :action => 'index' })
+  map.gscript_start('/gscript/start/:gaction',
+                    :controller => 'g_script',
+                    :action => 'start')
+  map.gscript_ready('/gscript/ready/:id/:selected',
+                    :controller => 'g_script',
+                    :action => 'ready')
+  map.gscript_cancel('/gscript/cancel/:id',
+                    :controller => 'g_script',
+                    :action => 'cancel')
+#   map.gscript_action('/gscript/:action/:gaction',
+#                      :controller => 'g_script',
+#                      :defaults => {:gaction => nil})
+#  map.action_start
+#  map.action_ready
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -40,6 +62,6 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+#  map.connect ':controller/:action/:id'
+#  map.connect ':controller/:action/:id.:format'
 end

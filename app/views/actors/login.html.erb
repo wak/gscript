@@ -1,4 +1,4 @@
-<% form_tag url_for(:controller => :actors, :action => :login) do -%>
+<% form_tag url_for(login_path) do -%>
   <label for="actor">アクター</label><br/>
   <%
     option_tags = Actor.all.map {|actor|

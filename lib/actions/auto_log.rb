@@ -1,6 +1,7 @@
 class AutoLog < GScript::GsActionBase
   allow_all
-  action_name '神様ログテスト'
+  action_name '神様ログ'
+  action_desc '神様ログテスト用に適当に値を変更します．'
 
   def start
     actor(:mit).fund += 100

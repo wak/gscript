@@ -1,6 +1,7 @@
 class Continue < GScript::GsActionBase
   allow_all
-  action_name 'Readyが続きます'
+  action_name 'Readyループ'
+  action_desc 'Ready状態を繰り返します．'
 
   def start
       @user[:times] = 0

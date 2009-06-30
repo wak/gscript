@@ -1,6 +1,7 @@
 class File < GScript::GsActionBase
   allow_actor :japan, :america
-  action_name 'ファイルのアップロードとダウンロード'
+  action_name 'ファイル操作'
+  action_desc 'ファイルのアップロードとダウンロード．'
 
   def start
     clear_fields

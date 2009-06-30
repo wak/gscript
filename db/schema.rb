@@ -35,7 +35,10 @@ ActiveRecord::Schema.define(:version => 20090525100458) do
   end
 
   create_table "action_logs", :force => true do |t|
-    t.integer  "action_id",  :null => false
+    t.integer  "action_id",                     :null => false
+    t.integer  "actor_id",                      :null => false
+    t.boolean  "canceled",   :default => false, :null => false
+    t.string   "status",                        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

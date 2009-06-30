@@ -28,8 +28,7 @@ module GScript
     def reset
       @changed = false
       @options = {}
-      @mode = :continue
-      @options[:method] = :start
+      @mode = :start
     end
     def changed?; @changed; end
     def ==(mode); @mode == mode; end

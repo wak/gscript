@@ -1,7 +1,7 @@
 class SendMoney < GScript::GsActionBase
   allow_all
-  action_name '送金サンプル'
-  action_desc '送金します．'
+  action_name '送金アクション'
+  action_desc '送金アクションのサンプルです．'
 
   def start
     select_field(:to, :actor,

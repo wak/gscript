@@ -7,7 +7,7 @@
 #  actor_id   :integer(4)      not null
 #  _selection :text            default(""), not null
 #  action     :string(255)     not null
-#  gscript    :text            default(""), not null
+#  gscript    :binary(16777215 default(""), not null
 #  message    :text            default(""), not null
 #  created_at :datetime
 #  updated_at :datetime
