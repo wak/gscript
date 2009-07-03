@@ -14,7 +14,7 @@ module GScript
           raise _e("Action file '#{path}' not found.")
         end
         class_eval(::File.read(path), path)
-        _d "load action: #{name}"
+        _d "Load action file `#{path}'"
         begin
           class_name = name.classify
           action = const_get(class_name)

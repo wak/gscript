@@ -33,7 +33,7 @@ module GScript
     def changed?; @changed; end
     def ==(mode); @mode == mode; end
     def inspect
-      "mode: '#{@mode}', method '#{@method}'"
+      "mode: '#{@mode}', method: '#{@method}'"
     end
     def option(name)
       @options[name]

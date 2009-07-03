@@ -16,12 +16,12 @@ class Action < ActiveRecord::Base
   has_many :action_logs, :dependent => :destroy
 
   def gaction
-    @action ||= GScript.action(iname)
+    @action ||= GScript.action_class(iname)
   end
   def name
-    gaction.action_name
+    gaction.get_action_name
   end
   def desc
-    gaction.action_desc
+    gaction.get_action_desc
   end
 end
