@@ -1,4 +1,4 @@
-<h1>GScript Index</h1>
+<h1>Actor</h1>
 <p>You are '<%=h @current_actor.name %>' actor.</p>
 <p>Your categories are [<%=h @current_actor.categories.map(&:name).join(', ') %>]. </p>
 
@@ -18,7 +18,7 @@
 <% end -%>
 <p>Click <%= link_to 'HERE', :action => :init_db %> to update GScript database.</p>
 
-<h2>These actions avaliable</h2>
+<h1>Executeable actions</h1>
 <p>The '<%=h @current_actor.name %>' actor can choose follow actions.</p>
 <ul>
   <% @current_actor.actions.each do |action| -%>
@@ -31,7 +31,7 @@
   <% end %>
 </ul>
 
-<h2>All Ready List</h2>
+<h1>Ready</h1>
 <ul>
   <% @current_actor.readies.each do |ready| -%>
     <li>
@@ -45,8 +45,8 @@
   <% end %>
 </ul>
 
-<h2>Status</h2>
-<table border="1">
+<h1>Status</h1>
+<table class="pretty_table">
   <tr>
     <th>Name</th>
     <th>Value</th>
@@ -59,8 +59,8 @@
   <% end -%>
 </table>
 
-<h2>Action Log</h2>
-<table border="1">
+<h1>Action Log</h1>
+<table class="pretty_table">
   <tr>
     <th>Actor</th>
     <th>Action</th>
@@ -95,7 +95,7 @@
   <% end -%>
 </table>
 
-<h2>All Actions List</h2>
+<h1>All Actions</h1>
 <ul>
   <% Action.all.each do |action| -%>
     <li><%=h action.name %> -- <%=h action.desc %></li>

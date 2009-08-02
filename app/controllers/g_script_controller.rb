@@ -1,7 +1,9 @@
 class GScriptController < ApplicationController
+  layout 'appli'
   skip_filter :login_check, :only => :init_db
 
   def index
+    @title = 'GScript Index'
     @readies = Ready.find(:all)
   end
   def start

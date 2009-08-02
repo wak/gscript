@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%= stylesheet_link_tag 'appli' %>
+    <title><%= (@title ? "#{@title} - " : "") + "GScript" %></title>
+  </head>
+
+  <body>
+    <div id="header">
+      <span class="title">
+        <%= @title || 'No TITLE' %>
+      </span>
+    </div>
+    <hr class="full_hr">
+
+    <table border="0" style="width: 100%;" class="main">
+      <tbody>
+        <tr>
+          <td class="menubar">
+            left
+          </td>
+          <td class="canvas">
+            <%= yield %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
