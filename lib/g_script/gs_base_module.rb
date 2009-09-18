@@ -23,12 +23,12 @@ module GScript
           end
         }
       }
-      klass.class_eval %Q{
+      klass.class_eval %q{
         def self._log_edit(s)
-          s
+          "#{self.name.slice(/([[:alpha:]]+)\Z/, 1)}: " + s
         end
         def _log_edit(s)
-          s
+          "#{self.class.name.slice(/([[:alpha:]]+)\Z/, 1)}: " + s
         end
       }
     end

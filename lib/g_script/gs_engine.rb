@@ -2,9 +2,6 @@ module GScript
   class GsEngine < GsBase
     attr_reader :_gs_fields, :ready, :status
 
-    def _log_edit(str)
-      super("#{_gs_info(:iname)}: #{str}")
-    end
     def initialize
       _d "Action created."
       actors = Actor.find(:all, :select => 'login')
