@@ -59,6 +59,15 @@
   <% end -%>
 </table>
 
+<h1>Log</h1>
+<ul>
+  <% @current_actor.logs.each do |log| -%>
+    <li>
+      <%=h log.created_at %>: <%=h log.message %>
+    </li>
+  <% end -%>
+</ul>
+
 <h1>Action Log</h1>
 <table class="pretty_table">
   <tr>

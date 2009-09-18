@@ -47,6 +47,8 @@ module GScript
       def _gs_info(key = nil)
         attrs = {
           :iname => _gs_iname,
+          :iname_small => _gs_iname.underscore,
+          :iname_large => _gs_iname,
           :name  => get_action_name,
           :desc  => get_action_desc
         }

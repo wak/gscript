@@ -25,9 +25,6 @@ class SendMoney < GScript::GsActionBase
     @user[:much] = input(:much)
 
     @current.fund -= input(:much)
-#    @status.log.active_actor = @current
-#    @status.log.passive_actor = input(:to)
-
     @status.change(:ready,
                    :actor => input(:to),
                    :method => :switch,
@@ -45,11 +42,14 @@ class SendMoney < GScript::GsActionBase
     end
   end
   def execute
-    @user[:to].fund += @user[:much]
+    from, to, much = @user[:from], @user[:to], @user[:much]
+
+    to.fund += much
     message = sprintf("%s => %s [$%d]",
-                      @user[:from].name, @user[:to].name, @user[:much])
-#    @user[:to].log(message, :type => :succeed)
-#    @user[:from].log(message, :type => :succeed)
+                      from.name, to.name, much)
+    write_log(:succeed,
+              :to => [from, to],
+              :args => { :from => from, :to => to, :much => much })
   end
   def cancel
     @user[:from].fund += @user[:much]

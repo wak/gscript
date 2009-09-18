@@ -32,4 +32,7 @@ class Actor < ActiveRecord::Base
   has_many(:categories,
            :through => :actor_categories,
            :dependent => :destroy)
+
+  has_many(:logs, :dependent => :destroy,
+           :order => 'id DESC')
 end

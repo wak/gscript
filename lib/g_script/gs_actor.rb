@@ -22,6 +22,9 @@ module GScript
         item(name)
       end
     end
+    def write_log(m)
+      Log.create!(:actor => _gs_actor, :message => m)
+    end
     def marshal_dump
       _gs_actor.login
     end

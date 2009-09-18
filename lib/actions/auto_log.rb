@@ -8,5 +8,6 @@ class AutoLog < GScript::GsActionBase
     actor(:japan).fund -= 10
     actor(:mit).power += 2
     actor(:japan).population += 30
+    write_log(:succeed, :to => [actor(:mit), actor(:japan)])
   end
 end

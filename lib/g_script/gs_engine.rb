@@ -72,7 +72,10 @@ module GScript
       login = (actor.is_a?(Actor) ? actor.login : actor)
       @current = actor(login)
     end
-
+    def write_log(sub_lv, options={})
+      lv = _gs_info(:iname_small)
+      GScript::GsLog.write_log(lv.to_sym, sub_lv, options)
+    end
     #*******************************************************
     #  Follow methods for GScript system
     #

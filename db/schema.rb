@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090525100458) do
+ActiveRecord::Schema.define(:version => 20090918131222) do
 
   create_table "action_log_actors", :force => true do |t|
     t.integer  "action_log_id", :null => false
@@ -95,6 +95,13 @@ ActiveRecord::Schema.define(:version => 20090525100458) do
     t.string   "v_string"
     t.boolean  "v_bool"
     t.string   "_value_type",                 :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "logs", :force => true do |t|
+    t.integer  "actor_id",                   :null => false
+    t.string   "message",    :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
