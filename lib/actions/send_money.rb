@@ -45,19 +45,16 @@ class SendMoney < GScript::GsActionBase
     from, to, much = @user[:from], @user[:to], @user[:much]
 
     to.fund += much
-    message = sprintf("%s => %s [$%d]",
-                      from.name, to.name, much)
     write_log(:succeed,
               :to => [from, to],
               :args => { :from => from, :to => to, :much => much })
   end
   def cancel
-    @user[:from].fund += @user[:much]
-    message = sprintf("CANCEL %s => %s [$%d]",
-                      @user[:from].name, @user[:to].name, @user[:much])
-#    @user[:to].log(message, :type => :cancel)
-#    @user[:from].log(message, :type => :cancel)
-
+    from, to, much = @user[:from], @user[:to], @user[:much]
+    from.fund += much
+    write_log(:canceled,
+              :to => [from, to],
+              :args => { :from => from, :to => to, :much => much })
     @status.change(:cancel)
   end
 end
