@@ -1,0 +1,7 @@
+CHANGE
+ * GsActionBase: change methods name for .get_action_name and #action_name.
+      - .get_action_name -> action_name(no_args)
+
+NEW
+ * Add new format for GScript input mode as Wiki.
+      - like this: @status.change(:input, :layout => :send_money)
