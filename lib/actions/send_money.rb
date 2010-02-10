@@ -6,12 +6,10 @@ class SendMoney < GScript::GsActionBase
   def start
     select_field(:to, :actor,
                  :list => actors,
-                 :name => 'Target actor',
                  :message => 'Select target actor')
     text_field(:much, :int,
                :min => 1,
                :max => @current.fund,
-               :name => 'Amount',
                :message => 'How much?',
                :error => {
                  :min => 'Should positive number.',
