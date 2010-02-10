@@ -40,7 +40,11 @@ module GScript
       @_gs_fields = []
     end
     def input(field)
-      @_gs_input[field]
+      data = @_gs_input[field]
+			unless data
+				raise RuleError, "Input data '#{field}' not defined"
+			end
+			return data
     end
     def actor(act)
       actor = @actorhash[act.to_s]
@@ -121,10 +125,6 @@ module GScript
         @status.log.write
       end
       return @status.mode
-		rescue GScriptError => e
-			raise e
-    rescue => e
-      raise SystemError, _e("Errors in script (#{script_info}):  #{e.message}")
     ensure
       GScript.current_engine = self
     end
