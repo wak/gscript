@@ -25,6 +25,7 @@ module GScript::GsAction
 				end
 				data.each {|item, value|
 					actor.item(item).value += value
+					#_d gformat(:updown, :item => actor.item(item), :diff => value)
 				}
 			}
 			@status.change(:finish)
