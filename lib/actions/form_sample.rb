@@ -1,4 +1,4 @@
-class Input < GScript::GsAction::GenericAction
+class FormSample < GScript::GsAction::GenericAction
   allow_all
   action_name 'フォームサンプル'
   action_desc 'フォームサンプルです．エラーも出たりします．'
