@@ -1,11 +1,15 @@
 school:
   name: 学校
+  actors: rits, mit
 
 country:
   name: 国
+  actors: japan, china, special
 
 company:
   name: 企業
+  actors: mitsubishi, toyota, special
 
 special:
   name: スペシャル
+  actors: special

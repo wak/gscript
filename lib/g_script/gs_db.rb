@@ -4,8 +4,19 @@ module GScript
   class GsDB < GsBase
     class << self
       def init_db
-        init_categories
-        init_actors
+				# if @@actor_category is true
+				#   use actors.yml's categories field
+				# else
+				#   use categories.yml's actors field
+				@@actor_category = true
+
+				if @@actor_category
+					init_categories
+					init_actors
+				else
+					init_actors
+					init_categories
+				end
         init_actions
         init_items
       end
@@ -50,6 +61,15 @@ module GScript
         Category.destroy_all
         load_gs_yaml('categories').each {|iname, data|
           data[:iname] = iname
+					as = strorary_to_ary(data['actors'] || [])
+					data.delete('actors')
+					unless @@actor_category
+						data[:actors] = as.map {|a|
+							actor = Actor.find_by_login(a)
+							raise RuleError, _e("Actor '#{a}' not exist") unless actor
+							actor
+						}
+					end
           Category.create!(data)
         }
       end
@@ -58,14 +78,15 @@ module GScript
         categories = Hash.new {|h, k| h[k] = Array.new }
         load_gs_yaml('actors').each {|login, data|
           data[:login] = login
-          cs = data['category']
-          data.delete('category')
+          cs = data['categories']
+          data.delete('categories')
           new_actor = Actor.create!(data)
           strorary_to_ary(cs).each {|c| categories[c] << new_actor }
         }
+				return unless @@actor_category
         categories.each {|iname, actors|
           c = Category.find_by_iname(iname)
-          raise _e("Bad category (actors.yml): '#{iname}'") unless c
+          raise RuleError, _e("Category '#{iname}' not exist") unless c
           c.actors = actors.uniq
         }
       end
