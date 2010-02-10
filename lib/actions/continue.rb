@@ -1,4 +1,4 @@
-class Continue < GScript::GsActionBase
+class Continue < GScript::GsAction::GenericAction
   allow_all
   action_name 'Readyループ'
   action_desc 'Ready状態を繰り返します．'

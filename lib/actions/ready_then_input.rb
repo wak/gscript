@@ -1,4 +1,4 @@
-class ReadyThenInput < GScript::GsActionBase
+class ReadyThenInput < GScript::GsAction::GenericAction
   def start
     @status.change(:ready, :method => :input)
   end

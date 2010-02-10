@@ -1,4 +1,4 @@
-class SendMoney < GScript::GsActionBase
+class SendMoney < GScript::GsAction::GenericAction
   allow_all
   action_name '送金アクション'
   action_desc '送金アクションのサンプルです．'

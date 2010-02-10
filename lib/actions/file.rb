@@ -1,4 +1,4 @@
-class File < GScript::GsActionBase
+class File < GScript::GsAction::GenericAction
   allow_actor :japan, :america
   action_name 'ファイル操作'
   action_desc 'ファイルのアップロードとダウンロード．'

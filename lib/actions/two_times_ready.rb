@@ -1,4 +1,4 @@
-class TwoTimesReady < GScript::GsActionBase
+class TwoTimesReady < GScript::GsAction::GenericAction
   allow_category :country
   action_name 'TwoTimesReady'
   action_desc '2回承認すると終了します．'

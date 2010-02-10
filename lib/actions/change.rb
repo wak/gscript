@@ -1,6 +1,8 @@
-class Change < GsActionBase
+class Change < GScript::GsAction::GenericAction
+	allow_all
+
   def start
-    actor(:japan).population *= 3
-    actor(:america).fund += 10
+		actor(:japan).fund += 100
+		actor(:japan).fund -= 100
   end
 end

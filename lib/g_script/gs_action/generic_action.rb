@@ -1,5 +1,5 @@
-module GScript
-  class GsActionBase < GsEngine
+module GScript::GsAction
+  class GenericAction < GScript::GsEngine
     class << self
       def allow_actor(*actors)
         write_inheritable_attribute(:allow_actors, actors)

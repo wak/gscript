@@ -1,4 +1,4 @@
-class AutoLog < GScript::GsActionBase
+class AutoLog < GScript::GsAction::GenericAction
   allow_all
   action_name '神様ログ'
   action_desc '神様ログテスト用に適当に値を変更します．'
