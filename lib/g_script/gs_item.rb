@@ -38,9 +38,9 @@ module GScript
       @_gs_item.save!
       unless @old_value
         @old_value = old_value
-        GScript.current_engine.
-          status.log.change(self, old_value, value)
       end
+			GScript.current_engine.
+				status.log.change(self, old_value, value)
       return @_gs_item.value
     end
     def old_value
