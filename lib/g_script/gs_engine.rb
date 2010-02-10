@@ -46,6 +46,7 @@ module GScript
 			end
 			return data
     end
+		alias :get_input :input
     def actor(act)
       actor = @actorhash[act.to_s]
 			unless actor
@@ -53,10 +54,12 @@ module GScript
 			end
 			return actor
     end
+		alias :get_actor :actor
     def actors(*acts)
       return @actors if acts.empty?
       acts.map {|t| actor(t) }
     end
+		alias :get_actors :actors
     def actor_c(*cats)
       cats = cats.map(&:to_s)
       categories =
@@ -64,6 +67,7 @@ module GScript
                       :conditions => {:iname => cats})
       return categories.map(&:actors).flatten.uniq
     end
+		alias :get_actor_c :actor_c
     def ready=(selected)
       @status.option(:selection).each_slice(2) {|key, value|
         if value.to_s == selected
