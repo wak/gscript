@@ -11,7 +11,7 @@ module GScript
 
         path = "#{RAILS_ROOT}/lib/actions/#{name}.rb"
         unless ::File.file?(path)
-          raise _e("Action file '#{path}' not found.")
+					raise ActionNotFound, _e("Action file '#{path}' not found.")
         end
         class_eval(::File.read(path), path)
         _d "Load action file `#{path}'"
@@ -19,9 +19,8 @@ module GScript
           class_name = name.classify
           action = const_get(class_name)
         rescue
-          raise _e("Action '#{class_name}' not defined.")
+					raise ActionNotFound, _e("Action '#{class_name}' not defined.")
         end
-        raise "Action Not Defined" unless action
         @@actions[name] = action
       end
     end

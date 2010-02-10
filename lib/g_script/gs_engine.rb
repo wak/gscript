@@ -43,14 +43,18 @@ module GScript
       @_gs_input[field]
     end
     def actor(act)
-      @actorhash[act.to_s]
+      actor = @actorhash[act.to_s]
+			unless actor
+				raise ActorNotFound, _e("Actor '#{act}' not found")
+			end
+			return actor
     end
     def actors(*acts)
       return @actors if acts.empty?
       acts.map {|t| actor(t) }
     end
     def actor_c(*cats)
-      cats = cats.to_a.map(&:to_s)
+      cats = cats.map(&:to_s)
       categories =
         Category.find(:all,
                       :conditions => {:iname => cats})
@@ -64,7 +68,7 @@ module GScript
         end
       }
       unless @ready
-        raise "Bad ready selected. (#{selected})"
+        raise SystemError, _e("Bad ready selected. (#{selected})")
       end
       return @ready
     end
@@ -81,7 +85,7 @@ module GScript
     #
     def _gs_field(klass, name, type, option, &verify)
       if @_gs_fields.any? {|f| f.name == name }
-        raise "Field '#{name}' already defined."
+        raise RuleError, _e("Field '#{name}' already defined.")
       end
       @_gs_fields << klass.new(name, type, option, &verify)
     end
@@ -117,9 +121,10 @@ module GScript
         @status.log.write
       end
       return @status.mode
-    rescue
-      _e "Errors in script (#{script_info})"
-      raise
+		rescue GScriptError => e
+			raise e
+    rescue => e
+      raise SystemError, _e("Errors in script (#{script_info}):  #{e.message}")
     ensure
       GScript.current_engine = self
     end
@@ -143,7 +148,7 @@ module GScript
     def _gs_status; @status end
     def _gs_save
       unless @status.mode == :ready
-        raise 'Cannot save status. (not :ready mode)'
+        raise SystemError, _e('Cannot save status. (not :ready mode)')
       end
       @_gs_ready ||= Ready.new
       @_gs_ready.gscript =
@@ -153,7 +158,7 @@ module GScript
       @_gs_ready.selection =
         @status.option(:selection).each_slice(2).map(&:last)
       unless @status.option(:actor)
-        raise 'GScript(:ready): Ready actor not selected.'
+        raise SystemError, _e('GScript(:ready): Ready actor not selected.')
       end
       @_gs_ready.message = @status.option(:message)
       @_gs_ready.actor = @status.option(:actor)._gs_actor

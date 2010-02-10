@@ -10,7 +10,7 @@ module GScript
     def change(mode, options={})
       unless [:continue, :input, :ready,
               :cancel, :finish, :send_file].member?(mode)
-        raise _e("GStatus#change: unknown mode(=#{mode})")
+        raise RuleError, _e("GStatus#change: unknown mode(=#{mode})")
       end
       @changed = true
       @mode = mode

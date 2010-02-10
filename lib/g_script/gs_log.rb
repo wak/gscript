@@ -3,7 +3,7 @@ module GScript
     @@styles = Hash.new {|h, n| h[n] = {} }
     class << self
       def add_style(level, sub_level, options={}, &block)
-        raise _e("add_style requre block") unless block
+        raise RuleError, _e("add_style requre block") unless block
         options[:block] = block
         @@styles[level][sub_level] = options
       end
@@ -14,10 +14,10 @@ module GScript
         args = options[:args] || []
         style = get_style(level, sub_level)
         unless style
-          raise _e("Style #{level.to_s}:#{sub_level.to_s} not defined")
+          raise RuleError, _e("Style #{level.to_s}:#{sub_level.to_s} not defined")
         end
         if style[:requires] && args && !(style[:requires] - args.keys).empty?
-          raise _e("#{level.to_s}:#{sub_level.to_s} miss argments (#{style[:requires] - args.keys}).")
+          raise RuleError, _e("#{level.to_s}:#{sub_level.to_s} miss argments (#{style[:requires] - args.keys}).")
         end
         options[:to].each {|actor|
           actor.write_log(style[:block].call(actor, args))

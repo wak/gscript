@@ -6,11 +6,6 @@ require 'cgi'
 module GScript
   include GScript::GsBaseModule
 
-  class ScriptNotFound < StandardError
-  end
-  class ItemNotFound < StandardError
-  end
-
   class << self
     def current_engine=(engine)
       @@current_engine = engine
@@ -25,4 +20,13 @@ module GScript
       GScript::GsActionSpace.action_class(action_name)
     end
   end
+
+	# Exception Classes
+	class GScriptError   < StandardError; end
+	class SystemError    < GScriptError ; end
+	class RuleError      < GScriptError ; end
+	class ActionNotFound < GScriptError ; end
+  class ScriptNotFound < GScriptError ; end
+  class ItemNotFound   < GScriptError ; end
+  class ActorNotFound  < GScriptError ; end
 end
