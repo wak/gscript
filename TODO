@@ -5,3 +5,7 @@ CHANGE
 NEW
  * Add new format for GScript input mode as Wiki.
       - like this: @status.change(:input, :layout => :send_money)
+ * Readyを多アクターに対応させる
+      - DBのテーブルを変更する必要がある．
+ * 排他制御
+      - 複数Railsを起動しなければ問題なし．
