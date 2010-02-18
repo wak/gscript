@@ -5,7 +5,7 @@ class SendMoney < GScript::GsAction::GenericAction
 
   def start
     select_field(:to, :actor,
-                 :list => actors,
+                 :list => actors_ex,
                  :message => 'Select target actor')
     text_field(:much, :int,
                :min => 1,
