@@ -1,5 +1,8 @@
 module GScript::GsAction
 	class SimpleAction < GenericAction
+    def setup; end
+    def setup_apply; end
+
 		def set_apply(input_actor, input_name, data)
 			@apply ||= []
 			@apply << {
@@ -9,9 +12,10 @@ module GScript::GsAction
 		def start
 			setup
 			do_input
-			@status.change(:input, :method => :execute)
+			@status.change(:input, :method => :apply)
 		end
-		def execute
+		def apply
+      setup_apply
 			@apply.each {|apply|
 				if apply[:actor]
 					actor = get_input(apply[:actor])
