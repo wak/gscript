@@ -60,14 +60,22 @@ module GScript
       acts.map {|t| actor(t) }
     end
 		alias :get_actors :actors
+    def actors_ex
+      get_actors - [@current]
+    end
+		alias :get_actors_ex :actors_ex
     def actor_c(*cats)
       cats = cats.map(&:to_s)
       categories =
         Category.find(:all,
                       :conditions => {:iname => cats})
-      return categories.map(&:actors).flatten.uniq
+      return categories.map(&:actors).flatten.uniq.map{|a| get_actor(a.login) }
     end
 		alias :get_actor_c :actor_c
+    def actor_c_ex(*cats)
+      get_actor_c(*cats) - [@current]
+    end
+		alias :get_actor_c_ex :actor_c_ex
     def ready=(selected)
       @status.option(:selection).each_slice(2) {|key, value|
         if value.to_s == selected
